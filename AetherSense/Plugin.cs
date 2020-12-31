@@ -4,6 +4,7 @@ using Dalamud.Plugin;
 using ImGuiNET;
 using System;
 using System.Threading.Tasks;
+using AetherSense.Triggers;
 
 namespace AetherSense
 {
@@ -17,6 +18,7 @@ namespace AetherSense
 
 		private bool enabled;
 		private bool visible;
+		private bool triggersLoaded = false;
 
 		public void Initialize(DalamudPluginInterface pluginInterface)
 		{
@@ -27,6 +29,8 @@ namespace AetherSense
 			DalamudPluginInterface.UiBuilder.OnOpenConfigUi += (s, e) => this.visible = true;
 
 			Task.Run(this.InitializeAsync);
+
+			this.LoadTriggers();
 		}
 
 		/// <summary>
@@ -54,7 +58,15 @@ namespace AetherSense
 				ButtplugClient client = new ButtplugClient("Aether Sense");
 				client.DeviceAdded += this.OnDeviceAdded;
 				client.DeviceRemoved += this.OnDeviceRemoved;
-				client.ScanningFinished += this.OnScanningFinished;
+				client.ScanningFinished += (o, e) =>
+				{
+					PluginLog.Information("Scan for devices complete");
+					/*Task.Run(async () =>
+					{
+						await client.StopScanningAsync();
+						await client.StartScanningAsync();
+					});*/
+				};
 
 				PluginLog.Information("Connect to embedded buttplug server");
 				ButtplugEmbeddedConnectorOptions connectorOptions = new ButtplugEmbeddedConnectorOptions();
@@ -78,9 +90,24 @@ namespace AetherSense
 			}
 		}
 
-		private void OnScanningFinished(object sender, EventArgs e)
+		private void LoadTriggers()
 		{
-			PluginLog.Information("Scan for devices complete");
+			PluginLog.Information("Loading Triggers");
+			this.triggersLoaded = true;
+			foreach (TriggerBase trigger in Configuration.Triggers)
+			{
+				trigger.Attach();
+			}
+		}
+
+		private void Unloadtriggers()
+		{
+			PluginLog.Information("Unloading Triggers");
+			this.triggersLoaded = false;
+			foreach (TriggerBase trigger in Configuration.Triggers)
+			{
+				trigger.Detach();
+			}
 		}
 
 		public void Dispose()
@@ -94,7 +121,15 @@ namespace AetherSense
 		public void OnGui()
 		{
 			if (!this.visible)
+			{
+				if (!this.triggersLoaded)
+					this.LoadTriggers();
+
 				return;
+			}
+
+			if (this.triggersLoaded)
+				this.Unloadtriggers();
 
 			if (ImGui.Begin("Aether Sense", ref this.visible))
 			{

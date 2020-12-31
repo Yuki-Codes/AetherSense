@@ -10,7 +10,7 @@ namespace AetherSense
     {
         public int Version { get; set; } = 0;
 
-        public List<TriggerBase> Triggers { get; set; }
+        public List<TriggerBase> Triggers { get; set; } = new List<TriggerBase>();
 
         public void Save()
         {

@@ -60,6 +60,8 @@ namespace ImGuiNET
 
 				a.Invoke();
 
+				ImGui.ShowDemoWindow();
+
 				_cl.Begin();
 				_cl.SetFramebuffer(_gd.MainSwapchain.Framebuffer);
 				_cl.ClearColorTarget(0, new RgbaFloat(_clearColor.X, _clearColor.Y, _clearColor.Z, 1f));

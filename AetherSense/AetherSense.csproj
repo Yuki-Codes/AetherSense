@@ -8,11 +8,9 @@
 		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
 		<DocumentationFile></DocumentationFile>
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+		<AssemblyVersion>1.0.0.1</AssemblyVersion>
+		<FileVersion>1.0.0.1</FileVersion>
 	</PropertyGroup>
-
-	<ItemGroup>
-	  <None Include="..\.editorconfig" Link=".editorconfig" />
-	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Buttplug" Version="1.0.2" />
@@ -46,7 +44,7 @@
 	</ItemGroup>
 
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
-		<Exec Command="echo Copy files to dalamud plugins&#xD;&#xA;rmdir &quot;%25appdata%25\XIVLauncher\devPlugins\AetherSense\&quot; /S /Q&#xD;&#xA;xcopy &quot;$(TargetDir)&quot; &quot;%25appdata%25\XIVLauncher\devPlugins\AetherSense\1.0.0.0\&quot; /e /h /i /y&#xD;&#xA;" />
+		<Exec Command="echo Copy files to dalamud plugins&#xD;&#xA;rmdir &quot;%25appdata%25\XIVLauncher\devPlugins\AetherSense\&quot; /S /Q&#xD;&#xA;xcopy &quot;$(TargetDir)&quot; &quot;%25appdata%25\XIVLauncher\devPlugins\AetherSense\1.0.0.1\&quot; /e /h /i /y&#xD;&#xA;" />
 	</Target>
 
 </Project>

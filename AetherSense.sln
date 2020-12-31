@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29709.97
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AetherSense", "AtherSense\AetherSense.csproj", "{24B6AA77-0FA8-4223-8C6B-C617BB296072}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests", "Tests\Tests.csproj", "{561C2597-F485-49A9-9331-9DD714FA67A3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AetherSense", "AetherSense\AetherSense.csproj", "{93B13D9E-CD96-4005-8061-7F16A5B3DEDB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,14 +13,14 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{24B6AA77-0FA8-4223-8C6B-C617BB296072}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{24B6AA77-0FA8-4223-8C6B-C617BB296072}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{24B6AA77-0FA8-4223-8C6B-C617BB296072}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{24B6AA77-0FA8-4223-8C6B-C617BB296072}.Release|Any CPU.Build.0 = Release|Any CPU
 		{561C2597-F485-49A9-9331-9DD714FA67A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{561C2597-F485-49A9-9331-9DD714FA67A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{561C2597-F485-49A9-9331-9DD714FA67A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{561C2597-F485-49A9-9331-9DD714FA67A3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{93B13D9E-CD96-4005-8061-7F16A5B3DEDB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{93B13D9E-CD96-4005-8061-7F16A5B3DEDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{93B13D9E-CD96-4005-8061-7F16A5B3DEDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{93B13D9E-CD96-4005-8061-7F16A5B3DEDB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
