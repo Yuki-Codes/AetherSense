@@ -18,7 +18,15 @@ namespace AetherSense.Patterns
 			set => Plugin.Devices.Intensity = value;
 		}
 
-		public async Task RunFor(int duration)
+		public void RunFor(int duration)
+		{
+			Task.Run(async () =>
+			{
+				await this.RunForAsync(duration);
+			});
+		}
+
+		public async Task RunForAsync(int duration)
 		{
 			this.Begin();
 			await Task.Delay(duration);

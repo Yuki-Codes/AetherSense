@@ -33,14 +33,14 @@ namespace Tests
 
 			Log.Information("Constant");
 			ConstantPattern c = new ConstantPattern();
-			await c.RunFor(1000);
+			await c.RunForAsync(1000);
 			Log.Information("Done");
 
 			Log.Information("Pulse");
 			PulsePattern p = new PulsePattern();
 			p.DownIntensity = 0.5;
 			p.UpDuration = 500;
-			await p.RunFor(10000);
+			await p.RunForAsync(10000);
 			Log.Information("Done");
 		}
 	}
