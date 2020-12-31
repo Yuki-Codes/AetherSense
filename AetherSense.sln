@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29709.97
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AtherSense", "AtherSense\AtherSense.csproj", "{24B6AA77-0FA8-4223-8C6B-C617BB296072}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AetherSense", "AtherSense\AetherSense.csproj", "{24B6AA77-0FA8-4223-8C6B-C617BB296072}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{305108CD-3901-4CE3-85EB-6864CBB61DF7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests", "Tests\Tests.csproj", "{305108CD-3901-4CE3-85EB-6864CBB61DF7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -2,8 +2,8 @@
 
 	<PropertyGroup>
 		<TargetFramework>netstandard2.0</TargetFramework>
-		<AssemblyName>AtherSense</AssemblyName>
-		<RootNamespace>AtherSense</RootNamespace>
+		<AssemblyName>AetherSense</AssemblyName>
+		<RootNamespace>AetherSense</RootNamespace>
 		<NoWarn>1701;1702;IDE0025; CS1591;</NoWarn>
 		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
 		<DocumentationFile></DocumentationFile>

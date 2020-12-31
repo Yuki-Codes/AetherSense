@@ -43,12 +43,13 @@ namespace AetherSense
 				await ButtplugClient.ConnectAsync(connectorOptions);
 
 				PluginLog.Information("Scan for devices");
-				await ButtplugClient.StartScanningAsync();
+				await ButtplugClient.ScanAsync();
 
 				PluginLog.Information("Devices {0}", ButtplugClient.Devices.Length);
 				foreach (ButtplugClientDevice device in ButtplugClient.Devices)
 				{
-					PluginLog.Information("Device {0} {1}", device.Index, device.Name);
+					PluginLog.Information("    Device {0} {1}", device.Index, device.Name);
+					await device.VibrateAsync(1.0, 1000);
 				}
 			}
 			catch (Exception ex)
@@ -91,6 +92,15 @@ namespace AetherSense
 		private void OnDeviceAdded(object sender, DeviceAddedEventArgs e)
 		{
 			PluginLog.Information("Device {0} connected", e.Device.Name);
+		}
+
+		public static void Vibrate(double strength, int duration)
+		{
+			// TODO: configuration for enabling/disabling/intensity multiply
+			foreach (ButtplugClientDevice device in ButtplugClient.Devices)
+			{
+				device.Vibrate(strength, duration);
+			}
 		}
 
 		private void OnSense(string args)

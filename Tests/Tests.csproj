@@ -11,7 +11,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\AtherSense\AtherSense.csproj" />
+		<ProjectReference Include="..\AtherSense\AetherSense.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
