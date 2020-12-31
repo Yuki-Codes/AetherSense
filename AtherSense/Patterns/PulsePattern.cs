@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using ImGuiNET;
 
 namespace AetherSense.Patterns
 {
@@ -8,6 +9,11 @@ namespace AetherSense.Patterns
 		public int UpDuration = 1000;
 		public double DownIntensity = 0.0;
 		public int DownDuration = 1000;
+
+		public override void OnEditorGui()
+		{
+			ImGui.Text("Hello There");
+		}
 
 		protected override async Task Run()
 		{

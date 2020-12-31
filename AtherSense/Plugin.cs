@@ -1,9 +1,7 @@
-﻿using AetherSense.Patterns;
-using Buttplug;
+﻿using Buttplug;
 using Dalamud.Plugin;
 using ImGuiNET;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace AetherSense
@@ -23,10 +21,20 @@ namespace AetherSense
 		{
 			DalamudPluginInterface = pluginInterface;
 			Configuration = DalamudPluginInterface.GetPluginConfig() as Configuration ?? new Configuration();
-			DalamudPluginInterface.CommandManager.AddHandler("/sense", "Scans for new intimate devices", OnSense);
-			DalamudPluginInterface.UiBuilder.OnBuildUi += DrawUI;
+			DalamudPluginInterface.CommandManager.AddHandler("/sense", "Opens the Aether Sense configuration window", this.OnSense);
+			DalamudPluginInterface.UiBuilder.OnBuildUi += OnGui;
+			DalamudPluginInterface.UiBuilder.OnOpenConfigUi += (s, e) => this.visible = true;
 
 			Task.Run(this.InitializeAsync);
+		}
+
+		public Action InitializeMock()
+		{
+			this.visible = true;
+
+			Task.Run(this.InitializeAsync);
+
+			return this.OnGui;
 		}
 
 		public async Task InitializeAsync()
@@ -78,27 +86,14 @@ namespace AetherSense
 			this.enabled = false;
 		}
 
-		private void DrawUI()
+		public void OnGui()
 		{
-			if (!visible)
+			if (!this.visible)
 				return;
 
-			////float scale = ImGui.GetIO().FontGlobalScale;
-
-			if (ImGui.Begin("Aether Sense", ref this.visible, ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse | ImGuiWindowFlags.NoResize))
+			if (ImGui.Begin("Aether Sense", ref this.visible))
 			{
-				if (ImGui.Button("Constant 1 second"))
-				{
-					ConstantPattern p = new ConstantPattern();
-					p.RunFor(1000);
-				}
-
-				if (ImGui.Button("Pulse 10 second"))
-				{
-					PulsePattern p = new PulsePattern();
-					p.UpDuration = 500;
-					p.RunFor(10000);
-				}
+				ConfigurationEditor.OnGui();
 			}
 
 			ImGui.End();

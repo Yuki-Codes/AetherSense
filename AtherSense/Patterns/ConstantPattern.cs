@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using ImGuiNET;
 
 namespace AetherSense.Patterns
 {
@@ -15,6 +16,11 @@ namespace AetherSense.Patterns
 		public override void End()
 		{
 			this.DevicesIntensity -= this.Intensity;
+		}
+
+		public override void OnEditorGui()
+		{
+			ImGui.Text("Hello There");
 		}
 
 		protected override Task Run()

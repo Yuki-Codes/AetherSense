@@ -1,47 +1,76 @@
 ﻿using System;
-using System.Threading.Tasks;
-using AetherSense;
-using AetherSense.Patterns;
+using System.Globalization;
+using System.Numerics;
+using System.Reflection;
+using System.Runtime.Serialization;
+using Dalamud.Configuration;
+using Dalamud.Plugin;
 using Serilog;
+using Serilog.Core;
 using Serilog.Events;
+using Veldrid;
+using Veldrid.Sdl2;
+using Veldrid.StartupUtilities;
 
-namespace Tests
+namespace ImGuiNET
 {
-	class Program
+	public class Program
 	{
-		static void Main(string[] args)
-		{
-			Console.WriteLine("Hello World!");
-			Run().Wait();
-			Console.ReadLine();
-		}
+		private static AetherSense.Plugin plugin = new AetherSense.Plugin();
 
-		private static async Task Run()
+		private static Sdl2Window _window;
+		private static GraphicsDevice _gd;
+		private static CommandList _cl;
+		private static ImGuiController _controller;
+		private static Vector3 _clearColor = new Vector3(0.45f, 0.55f, 0.6f);
+
+		public static void Main(string[] args)
 		{
 			LoggerConfiguration loggers = new LoggerConfiguration().MinimumLevel.Verbose().Enrich.FromLogContext();
-
 			loggers.WriteTo.Logger(logger => logger.WriteTo.Console(restrictedToMinimumLevel: LogEventLevel.Verbose));
-
 			Log.Logger = loggers.CreateLogger();
 			Log.Logger.Information("Logger is initialized");
 
-			Plugin plugin = new Plugin();
+			Action a = plugin.InitializeMock();
 
-			// Hack to boot the plugin and get its write thread going
-			_ = Task.Run(plugin.InitializeAsync);
-			await Task.Delay(100);
+			// Create window, GraphicsDevice, and all resources necessary for the demo.
+			VeldridStartup.CreateWindowAndGraphicsDevice(
+				new WindowCreateInfo(50, 50, 1280, 720, WindowState.Normal, "ImGui.NET Sample Program"),
+				new GraphicsDeviceOptions(true, null, true, ResourceBindingModel.Improved, true, true),
+				out _window,
+				out _gd);
+			_window.Resized += () =>
+			{
+				_gd.MainSwapchain.Resize((uint)_window.Width, (uint)_window.Height);
+				_controller.WindowResized(_window.Width, _window.Height);
+			};
+			_cl = _gd.ResourceFactory.CreateCommandList();
+			_controller = new ImGuiController(_gd, _gd.MainSwapchain.Framebuffer.OutputDescription, _window.Width, _window.Height);
+			Random random = new Random();
 
-			Log.Information("Constant");
-			ConstantPattern c = new ConstantPattern();
-			await c.RunForAsync(1000);
-			Log.Information("Done");
+			// Main application loop
+			while (_window.Exists)
+			{
+				InputSnapshot snapshot = _window.PumpEvents();
+				if (!_window.Exists) { break; }
+				_controller.Update(1f / 60f, snapshot); // Feed the input events to our ImGui controller, which passes them through to ImGui.
 
-			Log.Information("Pulse");
-			PulsePattern p = new PulsePattern();
-			p.DownIntensity = 0.5;
-			p.UpDuration = 500;
-			await p.RunForAsync(10000);
-			Log.Information("Done");
+				a.Invoke();
+
+				_cl.Begin();
+				_cl.SetFramebuffer(_gd.MainSwapchain.Framebuffer);
+				_cl.ClearColorTarget(0, new RgbaFloat(_clearColor.X, _clearColor.Y, _clearColor.Z, 1f));
+				_controller.Render(_gd, _cl);
+				_cl.End();
+				_gd.SubmitCommands(_cl);
+				_gd.SwapBuffers(_gd.MainSwapchain);
+			}
+
+			// Clean up Veldrid resources
+			_gd.WaitForIdle();
+			_controller.Dispose();
+			_cl.Dispose();
+			_gd.Dispose();
 		}
 	}
 }

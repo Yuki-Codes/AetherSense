@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.29709.97
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AetherSense", "AtherSense\AetherSense.csproj", "{24B6AA77-0FA8-4223-8C6B-C617BB296072}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests", "Tests\Tests.csproj", "{305108CD-3901-4CE3-85EB-6864CBB61DF7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests", "Tests\Tests.csproj", "{561C2597-F485-49A9-9331-9DD714FA67A3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{24B6AA77-0FA8-4223-8C6B-C617BB296072}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{24B6AA77-0FA8-4223-8C6B-C617BB296072}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{24B6AA77-0FA8-4223-8C6B-C617BB296072}.Release|Any CPU.Build.0 = Release|Any CPU
-		{305108CD-3901-4CE3-85EB-6864CBB61DF7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{305108CD-3901-4CE3-85EB-6864CBB61DF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{305108CD-3901-4CE3-85EB-6864CBB61DF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{305108CD-3901-4CE3-85EB-6864CBB61DF7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{561C2597-F485-49A9-9331-9DD714FA67A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{561C2597-F485-49A9-9331-9DD714FA67A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{561C2597-F485-49A9-9331-9DD714FA67A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{561C2597-F485-49A9-9331-9DD714FA67A3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

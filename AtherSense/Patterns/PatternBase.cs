@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace AetherSense.Patterns
@@ -17,6 +14,8 @@ namespace AetherSense.Patterns
 			get => Plugin.Devices.Intensity;
 			set => Plugin.Devices.Intensity = value;
 		}
+
+		public abstract void OnEditorGui();
 
 		public void RunFor(int duration)
 		{
