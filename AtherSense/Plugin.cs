@@ -1,7 +1,9 @@
-﻿using Buttplug;
+﻿using AetherSense.Patterns;
+using Buttplug;
 using Dalamud.Plugin;
 using ImGuiNET;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace AetherSense
@@ -10,11 +12,11 @@ namespace AetherSense
 	{
 		public static DalamudPluginInterface DalamudPluginInterface;
 		public static Configuration Configuration;
-
-		public static ButtplugClient ButtplugClient;
+		public static Devices Devices;
 
 		public string Name => "AetherSense";
 
+		private bool enabled;
 		private bool visible;
 
 		public void Initialize(DalamudPluginInterface pluginInterface)
@@ -30,26 +32,31 @@ namespace AetherSense
 		public async Task InitializeAsync()
 		{
 			PluginLog.Information("Initializing Buttplug Interface");
+			this.enabled = true;
 
 			try
 			{
-				ButtplugClient = new ButtplugClient("Aether Sense");
-				ButtplugClient.DeviceAdded += this.OnDeviceAdded;
-				ButtplugClient.ScanningFinished += this.OnScanningFinished;
+				Devices = new Devices();
+
+				ButtplugClient client = new ButtplugClient("Aether Sense");
+				client.DeviceAdded += this.OnDeviceAdded;
+				client.DeviceRemoved += this.OnDeviceRemoved;
+				client.ScanningFinished += this.OnScanningFinished;
 
 				PluginLog.Information("Connect to embedded buttplug server");
 				ButtplugEmbeddedConnectorOptions connectorOptions = new ButtplugEmbeddedConnectorOptions();
 				connectorOptions.ServerName = "Aether Sense Server";
-				await ButtplugClient.ConnectAsync(connectorOptions);
+				await client.ConnectAsync(connectorOptions);
 
 				PluginLog.Information("Scan for devices");
-				await ButtplugClient.ScanAsync();
+				await client.ScanAsync();
 
-				PluginLog.Information("Devices {0}", ButtplugClient.Devices.Length);
-				foreach (ButtplugClientDevice device in ButtplugClient.Devices)
+				while (this.enabled)
 				{
-					PluginLog.Information("    Device {0} {1}", device.Index, device.Name);
-					await device.VibrateAsync(1.0, 1000);
+					await Devices.Write();
+
+					// 33 ms = 30fps max
+					await Task.Delay(32);
 				}
 			}
 			catch (Exception ex)
@@ -67,6 +74,8 @@ namespace AetherSense
 		{
 			DalamudPluginInterface.CommandManager.ClearHandlers();
 			DalamudPluginInterface.Dispose();
+
+			this.enabled = false;
 		}
 
 		private void DrawUI()
@@ -78,12 +87,6 @@ namespace AetherSense
 
 			if (ImGui.Begin("Aether Sense", ref this.visible, ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse | ImGuiWindowFlags.NoResize))
 			{
-				ImGui.Text($"Devices: {ButtplugClient.Devices.Length}");
-
-				foreach (ButtplugClientDevice device in ButtplugClient.Devices)
-				{
-					ImGui.Text(device.Name);
-				}
 			}
 
 			ImGui.End();
@@ -91,16 +94,14 @@ namespace AetherSense
 
 		private void OnDeviceAdded(object sender, DeviceAddedEventArgs e)
 		{
-			PluginLog.Information("Device {0} connected", e.Device.Name);
+			PluginLog.Information("Device {0} added", e.Device.Name);
+			Devices.AddDevice(e.Device);
 		}
 
-		public static void Vibrate(double strength, int duration)
+		private void OnDeviceRemoved(object sender, DeviceRemovedEventArgs e)
 		{
-			// TODO: configuration for enabling/disabling/intensity multiply
-			foreach (ButtplugClientDevice device in ButtplugClient.Devices)
-			{
-				device.Vibrate(strength, duration);
-			}
+			PluginLog.Information("Device {0} removed", e.Device.Name);
+			Devices.RemoveDevice(e.Device);
 		}
 
 		private void OnSense(string args)
