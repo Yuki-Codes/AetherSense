@@ -26,12 +26,15 @@ namespace ImGuiNET
 
 		public static void Main(string[] args)
 		{
+			IPluginConfiguration config = GetConfig(plugin.GetType().Assembly);
+			
+
 			LoggerConfiguration loggers = new LoggerConfiguration().MinimumLevel.Verbose().Enrich.FromLogContext();
 			loggers.WriteTo.Logger(logger => logger.WriteTo.Console(restrictedToMinimumLevel: LogEventLevel.Verbose));
 			Log.Logger = loggers.CreateLogger();
 			Log.Logger.Information("Logger is initialized");
 
-			Action a = plugin.InitializeMock();
+			Action a = plugin.InitializeMock(config);
 
 			// Create window, GraphicsDevice, and all resources necessary for the demo.
 			VeldridStartup.CreateWindowAndGraphicsDevice(
@@ -71,6 +74,19 @@ namespace ImGuiNET
 			_controller.Dispose();
 			_cl.Dispose();
 			_gd.Dispose();
+		}
+
+		private static IPluginConfiguration GetConfig(Assembly asm)
+		{
+			foreach (var type in asm.GetTypes())
+			{
+				if (type.GetInterface(typeof(IPluginConfiguration).FullName) != null)
+				{
+					return (IPluginConfiguration)Activator.CreateInstance(type);
+				}
+			}
+
+			throw new Exception("Plugin configuration type not found");
 		}
 	}
 }

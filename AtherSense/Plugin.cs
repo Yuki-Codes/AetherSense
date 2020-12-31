@@ -1,4 +1,5 @@
 ﻿using Buttplug;
+using Dalamud.Configuration;
 using Dalamud.Plugin;
 using ImGuiNET;
 using System;
@@ -28,12 +29,16 @@ namespace AetherSense
 			Task.Run(this.InitializeAsync);
 		}
 
-		public Action InitializeMock()
+		/// <summary>
+		/// Initializes the plugin in mock test mode outside of the game
+		/// </summary>
+		/// <param name="configuration">the plugin configuration to use</param>
+		/// <returns>an action to be invoked for ImGUI drawing</returns>
+		public Action InitializeMock(IPluginConfiguration configuration)
 		{
 			this.visible = true;
-
+			Configuration = configuration as Configuration;
 			Task.Run(this.InitializeAsync);
-
 			return this.OnGui;
 		}
 
