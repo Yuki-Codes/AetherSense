@@ -1,22 +1,30 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-	<TargetFramework>netstandard2.0</TargetFramework>
-	<AssemblyName>AtherSense</AssemblyName>
-	<RootNamespace>AtherSense</RootNamespace>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<AssemblyName>AtherSense</AssemblyName>
+		<RootNamespace>AtherSense</RootNamespace>
+		<NoWarn>1701;1702;IDE0025; CS1591;</NoWarn>
+		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+		<DocumentationFile></DocumentationFile>
+		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+	</PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-	<NoWarn>1701;1702;IDE0025; CS1591;</NoWarn>
-	<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-	<DocumentationFile></DocumentationFile>
-  </PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="Buttplug" Version="1.0.2" />
+	</ItemGroup>
 
-  <ItemGroup>
-	<None Update="AetherSense.json">
-	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	</None>
-  </ItemGroup>
+	<ItemGroup>
+		<None Update="AetherSense.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="buttplug_rs_ffi.dll">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="lib\buttplug_rs_ffi.dll">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
 
 	<ItemGroup>
 		<Reference Include="Dalamud">
@@ -25,6 +33,7 @@
 		</Reference>
 		<Reference Include="ImGui.NET">
 			<HintPath>$(AppData)\XIVLauncher\addon\Hooks\ImGui.NET.dll</HintPath>
+			<Private>false</Private>
 		</Reference>
 		<Reference Include="ImGuiScene">
 			<HintPath>$(AppData)\XIVLauncher\addon\Hooks\ImGuiScene.dll</HintPath>
@@ -32,8 +41,8 @@
 		</Reference>
 	</ItemGroup>
 
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-	<Exec Command="echo Copy files to dalamud plugins&#xD;&#xA;xcopy &quot;$(TargetDir)AetherSense.json&quot; &quot;%25appdata%25\XIVLauncher\devPlugins\AetherSense\1.0.0.0\&quot; /i /y&#xD;&#xA;xcopy &quot;$(TargetPath)&quot; &quot;%25appdata%25\XIVLauncher\devPlugins\AetherSense\1.0.0.0\&quot; /i /y&#xD;&#xA;" />
-  </Target>
+	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
+		<Exec Command="echo Copy files to dalamud plugins&#xD;&#xA;rmdir &quot;%25appdata%25\XIVLauncher\devPlugins\AetherSense\&quot; /S /Q&#xD;&#xA;xcopy &quot;$(TargetDir)&quot; &quot;%25appdata%25\XIVLauncher\devPlugins\AetherSense\1.0.0.0\&quot; /e /h /i /y&#xD;&#xA;" />
+	</Target>
 
 </Project>
