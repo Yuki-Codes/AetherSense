@@ -40,6 +40,26 @@
         "$type": "AetherSense.Patterns.ConstantPattern, AetherSense",
         "Intensity": 1.0
       }
+    },
+    {
+      "$type": "AetherSense.Triggers.ChatTrigger, AetherSense",
+      "Duration": 2400,
+      "RegexPattern": "You begin casting",
+      "Name": "Casting Trigger",
+      "Pattern": {
+        "$type": "AetherSense.Patterns.ConstantPattern, AetherSense",
+        "Intensity": 0.25
+      }
+    },
+    {
+      "$type": "AetherSense.Triggers.ChatTrigger, AetherSense",
+      "Duration": 500,
+      "RegexPattern": "You cast",
+      "Name": "Casted Trigger",
+      "Pattern": {
+        "$type": "AetherSense.Patterns.ConstantPattern, AetherSense",
+        "Intensity": 1.0
+      }
     }
   ]
 }

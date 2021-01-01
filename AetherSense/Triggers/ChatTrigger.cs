@@ -41,15 +41,13 @@ namespace AetherSense.Triggers
 
 		private void OnChatMessage(XivChatType type, uint senderId, ref SeString sender, ref SeString message, ref bool isHandled)
 		{
-			PluginLog.Information("Recieved chat: " + type + " - " + message.TextValue);
-
 			if (this.Pattern == null)
 				return;
 
-			PluginLog.Information("Match: " + Regex.IsMatch(message.TextValue, this.RegexPattern));
 			if (!Regex.IsMatch(message.TextValue, this.RegexPattern))
 				return;
 
+			PluginLog.Information("Triggered: " + this.Name);
 			this.Pattern.RunFor(this.Duration);
 		}
 	}
