@@ -43,7 +43,7 @@
     },
     {
       "$type": "AetherSense.Triggers.ChatTrigger, AetherSense",
-      "Duration": 2400,
+      "Duration": 1000,
       "RegexPattern": "You begin casting",
       "Name": "Casting Trigger",
       "Pattern": {

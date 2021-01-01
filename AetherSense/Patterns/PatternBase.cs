@@ -62,6 +62,9 @@ namespace AetherSense.Patterns
 			{
 				await Task.Delay(100);
 				this.DurationLeft -= 100;
+
+				// Cap duration at 10 seconds
+				this.DurationLeft = Math.Min(this.DurationLeft, 10000);
 			}
 
 			this.End();
@@ -76,7 +79,7 @@ namespace AetherSense.Patterns
 
 			this.Active = true;
 
-			if (this.lastRunTask != null && !this.lastRunTask.IsCompleted)
+			if (this.lastRunTask != null && !this.lastRunTask.IsCompleted && !this.lastRunTask.IsFaulted)
 				throw new Exception("Last pattern task did not complete");
 
 			this.lastRunTask = Task.Run(this.Run);
