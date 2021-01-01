@@ -15,6 +15,7 @@ namespace AetherSense.Patterns
 
 		public override void End()
 		{
+			base.End();
 			this.DevicesIntensity -= this.Intensity;
 		}
 

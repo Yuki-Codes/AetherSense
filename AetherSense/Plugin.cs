@@ -6,6 +6,7 @@ using System;
 using System.Threading.Tasks;
 using AetherSense.Triggers;
 using System.IO;
+using AetherSense.Patterns;
 
 namespace AetherSense
 {
@@ -13,11 +14,12 @@ namespace AetherSense
 	{
 		public static DalamudPluginInterface DalamudPluginInterface;
 		public static Configuration Configuration;
-		public static Devices Devices;
+		public static Devices Devices = new Devices();
 
 		public string Name => "AetherSense";
 
 		private bool enabled;
+		private bool debugVisible;
 		private bool visible;
 		private bool triggersLoaded = false;
 
@@ -27,6 +29,7 @@ namespace AetherSense
 			////Configuration = DalamudPluginInterface.GetPluginConfig() as Configuration ?? new Configuration();
 			Configuration = Configuration.Load();
 			DalamudPluginInterface.CommandManager.AddHandler("/sense", "Opens the Aether Sense configuration window", this.OnSense);
+			DalamudPluginInterface.CommandManager.AddHandler("/senseDebug", "Opens the Aether Sense debug window", this.OnDebug);
 			DalamudPluginInterface.UiBuilder.OnBuildUi += OnGui;
 			DalamudPluginInterface.UiBuilder.OnOpenConfigUi += (s, e) => this.visible = true;
 
@@ -43,6 +46,7 @@ namespace AetherSense
 		public Action InitializeMock()
 		{
 			this.visible = true;
+			this.debugVisible = true;
 			Configuration = Configuration.Load();
 			Task.Run(this.InitializeAsync);
 			return this.OnGui;
@@ -55,8 +59,6 @@ namespace AetherSense
 
 			try
 			{
-				Devices = new Devices();
-
 				ButtplugClient client = new ButtplugClient("Aether Sense");
 				client.DeviceAdded += this.OnDeviceAdded;
 				client.DeviceRemoved += this.OnDeviceRemoved;
@@ -123,6 +125,14 @@ namespace AetherSense
 
 		public void OnGui()
 		{
+			if (this.debugVisible)
+			{
+				if (ImGui.Begin("Aether Sense Status", ref this.debugVisible))
+				{
+					DebugWindow.OnGui();
+				}
+			}
+
 			if (!this.visible)
 			{
 				if (!this.triggersLoaded)
@@ -157,6 +167,11 @@ namespace AetherSense
 		private void OnSense(string args)
 		{
 			this.visible = true;
+		}
+
+		private void OnDebug(string args)
+		{
+			this.debugVisible = true;
 		}
 	}
 }

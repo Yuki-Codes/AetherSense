@@ -1,12 +1,20 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using Dalamud.Plugin;
 using Newtonsoft.Json;
 
 namespace AetherSense.Patterns
 {
 	public abstract class PatternBase
 	{
-		protected bool Active { get; private set; }
+		public static List<PatternBase> ActivePatterns = new List<PatternBase>();
+
+		[JsonIgnore]
+		public bool Active { get; private set; }
+
+		[JsonIgnore]
+		public int DurationLeft { get; private set; }
 
 		protected double DevicesIntensity
 		{
@@ -16,10 +24,19 @@ namespace AetherSense.Patterns
 
 		private Task lastRunTask;
 
+
+
 		public abstract void OnEditorGui();
 
 		public void RunFor(int duration)
 		{
+			if (this.Active)
+			{
+				PluginLog.Information("Extend pattern: " + this.GetType().Name + " for " + duration);
+				this.DurationLeft += duration;
+				return;
+			}
+
 			Task.Run(async () =>
 			{
 				await this.RunForAsync(duration);
@@ -28,13 +45,35 @@ namespace AetherSense.Patterns
 
 		public async Task RunForAsync(int duration)
 		{
+			if (this.Active)
+			{
+				PluginLog.Information("Extend pattern: " + this.GetType().Name + " for " + duration);
+				this.DurationLeft += duration;
+				return;
+			}
+
+			this.DurationLeft = duration;
+
+			PluginLog.Information("Run pattern: " + this.GetType().Name + " for " + duration);
+
 			this.Begin();
-			await Task.Delay(duration);
+
+			while (this.DurationLeft > 0)
+			{
+				await Task.Delay(100);
+				this.DurationLeft -= 100;
+			}
+
 			this.End();
 		}
 
 		public virtual void Begin()
 		{
+			lock (ActivePatterns)
+			{
+				ActivePatterns.Add(this);
+			}
+
 			this.Active = true;
 
 			if (this.lastRunTask != null && !this.lastRunTask.IsCompleted)
@@ -46,6 +85,16 @@ namespace AetherSense.Patterns
 		public virtual void End()
 		{
 			this.Active = false;
+
+			lock (ActivePatterns)
+			{
+				ActivePatterns.Remove(this);
+			}
+
+			if (this.lastRunTask.IsFaulted)
+			{
+				PluginLog.Error(this.lastRunTask.Exception, "Error in pattern task");
+			}
 		}
 
 		protected abstract Task Run();

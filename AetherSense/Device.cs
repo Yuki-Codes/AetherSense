@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Buttplug;
 
 namespace AetherSense
@@ -22,13 +23,16 @@ namespace AetherSense
 
 			this.lastIntensity = this.Intensity;
 
-			if (this.Intensity <= 0)
+			double i = Math.Max(this.Intensity, 0);
+			i = Math.Min(i, 1);
+
+			if (i <= 0)
 			{
 				await this.ClientDevice.SendStopDeviceCmd();
 			}
 			else
 			{
-				await this.ClientDevice.SendVibrateCmd(this.Intensity);
+				await this.ClientDevice.SendVibrateCmd(i);
 			}
 		}
 	}
