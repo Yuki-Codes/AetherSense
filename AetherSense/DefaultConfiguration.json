@@ -4,18 +4,8 @@
     {
       "$type": "AetherSense.Triggers.ChatTrigger, AetherSense",
       "Duration": 1000,
-      "RegexPattern": "Critical!",
+      "RegexPattern": "Critical! The",
       "Name": "Critical Hit Trigger",
-      "Pattern": {
-        "$type": "AetherSense.Patterns.ConstantPattern, AetherSense",
-        "Intensity": 1.0
-      }
-    },
-    {
-      "$type": "AetherSense.Triggers.ChatTrigger, AetherSense",
-      "Duration": 500,
-      "RegexPattern": "takes [0-9]+ damage.",
-      "Name": "Dealt Damage Trigger",
       "Pattern": {
         "$type": "AetherSense.Patterns.ConstantPattern, AetherSense",
         "Intensity": 1.0

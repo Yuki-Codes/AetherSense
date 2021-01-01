@@ -44,10 +44,12 @@ namespace AetherSense.Triggers
 			if (this.Pattern == null)
 				return;
 
-			if (!Regex.IsMatch(message.TextValue, this.RegexPattern))
+			string messageStr = message.TextValue;
+
+			if (!Regex.IsMatch(messageStr, this.RegexPattern))
 				return;
 
-			PluginLog.Information("Triggered: " + this.Name);
+			PluginLog.Information($"Triggered: {this.Name} with chat message: \"{messageStr}\" from {senderId} on chat: {type}");
 			this.Pattern.RunFor(this.Duration);
 		}
 	}
