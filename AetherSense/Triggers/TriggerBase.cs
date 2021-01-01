@@ -23,10 +23,11 @@ namespace AetherSense.Triggers
 		public bool OnEditorGuiTop(int index)
 		{
 			bool keepEntry = true;
-			bool open = ImGui.CollapsingHeader(index.ToString(), ref keepEntry);
-			ImGui.SameLine();
+			ImGui.PushID("entry_" + index.ToString());
 
 			string check = this.enabled ? "X" : " ";
+			bool open = ImGui.CollapsingHeader(index.ToString(), ref keepEntry);
+			ImGui.SameLine();
 			ImGui.Text($"[{check}] {this.name}");
 
 			if (open)
@@ -37,6 +38,7 @@ namespace AetherSense.Triggers
 				this.OnEditorGui();
 			}
 
+			ImGui.PopID();
 
 			return keepEntry;
 		}

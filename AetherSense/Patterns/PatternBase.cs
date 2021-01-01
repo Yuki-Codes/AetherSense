@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace AetherSense.Patterns
 {
@@ -7,13 +8,13 @@ namespace AetherSense.Patterns
 	{
 		protected bool Active { get; private set; }
 
-		private Task lastRunTask;
-
-		public double DevicesIntensity
+		protected double DevicesIntensity
 		{
 			get => Plugin.Devices.Intensity;
 			set => Plugin.Devices.Intensity = value;
 		}
+
+		private Task lastRunTask;
 
 		public abstract void OnEditorGui();
 

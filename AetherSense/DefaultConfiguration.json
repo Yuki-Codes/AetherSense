@@ -1,0 +1,45 @@
+{
+  "$type": "AetherSense.Configuration, AetherSense",
+  "Triggers": [
+    {
+      "$type": "AetherSense.Triggers.ChatTrigger, AetherSense",
+      "Duration": 1000,
+      "RegexPattern": "Critical!",
+      "Name": "Critical Hit Trigger",
+      "Pattern": {
+        "$type": "AetherSense.Patterns.ConstantPattern, AetherSense",
+        "Intensity": 1.0
+      }
+    },
+    {
+      "$type": "AetherSense.Triggers.ChatTrigger, AetherSense",
+      "Duration": 500,
+      "RegexPattern": "takes [0-9]+ damage.",
+      "Name": "Dealt Damage Trigger",
+      "Pattern": {
+        "$type": "AetherSense.Patterns.ConstantPattern, AetherSense",
+        "Intensity": 1.0
+      }
+    },
+    {
+      "$type": "AetherSense.Triggers.ChatTrigger, AetherSense",
+      "Duration": 1000,
+      "RegexPattern": "recovers [0-9]+ HP.",
+      "Name": "Healed Trigger",
+      "Pattern": {
+        "$type": "AetherSense.Patterns.ConstantPattern, AetherSense",
+        "Intensity": 1.0
+      }
+    },
+    {
+      "$type": "AetherSense.Triggers.ChatTrigger, AetherSense",
+      "Duration": 1000,
+      "RegexPattern": "recover [0-9]+ HP.",
+      "Name": "Healed Self Trigger",
+      "Pattern": {
+        "$type": "AetherSense.Patterns.ConstantPattern, AetherSense",
+        "Intensity": 1.0
+      }
+    }
+  ]
+}

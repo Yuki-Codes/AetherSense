@@ -5,6 +5,7 @@ using ImGuiNET;
 using System;
 using System.Threading.Tasks;
 using AetherSense.Triggers;
+using System.IO;
 
 namespace AetherSense
 {
@@ -23,7 +24,8 @@ namespace AetherSense
 		public void Initialize(DalamudPluginInterface pluginInterface)
 		{
 			DalamudPluginInterface = pluginInterface;
-			Configuration = DalamudPluginInterface.GetPluginConfig() as Configuration ?? new Configuration();
+			////Configuration = DalamudPluginInterface.GetPluginConfig() as Configuration ?? new Configuration();
+			Configuration = Configuration.Load();
 			DalamudPluginInterface.CommandManager.AddHandler("/sense", "Opens the Aether Sense configuration window", this.OnSense);
 			DalamudPluginInterface.UiBuilder.OnBuildUi += OnGui;
 			DalamudPluginInterface.UiBuilder.OnOpenConfigUi += (s, e) => this.visible = true;
@@ -38,10 +40,10 @@ namespace AetherSense
 		/// </summary>
 		/// <param name="configuration">the plugin configuration to use</param>
 		/// <returns>an action to be invoked for ImGUI drawing</returns>
-		public Action InitializeMock(IPluginConfiguration configuration)
+		public Action InitializeMock()
 		{
 			this.visible = true;
-			Configuration = configuration as Configuration;
+			Configuration = Configuration.Load();
 			Task.Run(this.InitializeAsync);
 			return this.OnGui;
 		}
@@ -96,6 +98,7 @@ namespace AetherSense
 			this.triggersLoaded = true;
 			foreach (TriggerBase trigger in Configuration.Triggers)
 			{
+				PluginLog.Information("    > " + trigger.Name);
 				trigger.Attach();
 			}
 		}

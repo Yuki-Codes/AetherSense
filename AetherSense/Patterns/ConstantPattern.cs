@@ -5,7 +5,7 @@ namespace AetherSense.Patterns
 {
 	public class ConstantPattern : PatternBase
 	{
-		public double Intensity = 1.0;
+		public double Intensity { get; set; } = 1.0;
 
 		public override void Begin()
 		{
