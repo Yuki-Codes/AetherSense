@@ -38,6 +38,10 @@ namespace AetherSense
 			}
 
 			string version = typeof(Plugin).Assembly.GetName().Version.ToString();
+
+			if (File.Exists(Path.Combine(pluginDir, pluginName + ".dll")))
+				return pluginDir;
+
 			pluginDir = Path.Combine(pluginDir, version);
 
 			if (!Directory.Exists(pluginDir))
