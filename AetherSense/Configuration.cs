@@ -1,11 +1,9 @@
 ﻿using AetherSense.Triggers;
-using Dalamud.Configuration;
 using Dalamud.Plugin;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
 
 namespace AetherSense
 {
@@ -27,15 +25,22 @@ namespace AetherSense
 
 			if (!File.Exists(path))
 			{
-				string dir = Plugin.DalamudPluginInterface.GetPluginDirectory();
-				path = Path.Combine(dir, "DefaultConfiguration.json");
-
-				if (!File.Exists(path))
-				{
-					throw new Exception($"Unable to locate default configuration at {path}");
-				}
-
 				PluginLog.Information("Loading default configuration");
+				return GetDefaultConfiguration();
+			}
+
+			string json = File.ReadAllText(path);
+			return JsonConvert.DeserializeObject<Configuration>(json, Settings);
+		}
+
+		public static Configuration GetDefaultConfiguration()
+		{
+			string dir = Plugin.DalamudPluginInterface.GetPluginDirectory();
+			string path = Path.Combine(dir, "DefaultConfiguration.json");
+
+			if (!File.Exists(path))
+			{
+				throw new Exception($"Unable to locate default configuration at {path}");
 			}
 
 			string json = File.ReadAllText(path);

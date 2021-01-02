@@ -10,11 +10,19 @@ namespace AetherSense.Triggers
 	{
 		private string regexPattern = "";
 		private int duration = 1000;
+		private bool wasPreviousMessageYou = false;
+		private bool onlyYou = true;
 
 		public int Duration
 		{
 			get => this.duration;
 			set => this.duration = value;
+		}
+
+		public bool OnlyYou
+		{
+			get => this.onlyYou;
+			set => onlyYou = value;
 		}
 
 		public string RegexPattern
@@ -35,8 +43,18 @@ namespace AetherSense.Triggers
 
 		public override void OnEditorGui()
 		{
+			ImGui.SameLine();
+			ImGui.Checkbox("Only Self", ref this.onlyYou);
+			if (ImGui.IsItemHovered())
+				ImGui.SetTooltip("This trigger will only work if the proceding line in the log begins with 'You', eg. 'You cast' or 'You use'");
+
 			ImGui.InputText("Regex", ref this.regexPattern, 32);
+			if (ImGui.IsItemHovered())
+				ImGui.SetTooltip("A regex-format string to check each chat message with.");
+
 			ImGui.InputInt("Duration", ref this.duration);
+			if (ImGui.IsItemHovered())
+				ImGui.SetTooltip("The duration to run the selected pattern for when this trigger runs.");
 		}
 
 		private void OnChatMessage(XivChatType type, uint senderId, ref SeString sender, ref SeString message, ref bool isHandled)
@@ -44,12 +62,26 @@ namespace AetherSense.Triggers
 			if (this.Pattern == null)
 				return;
 
-			string messageStr = message.TextValue;
+			this.OnChatMessage(message.TextValue);
+		}
 
-			if (!Regex.IsMatch(messageStr, this.RegexPattern))
+		public void OnChatMessage(string message)
+		{
+			if (message.StartsWith("You"))
+			{
+				this.wasPreviousMessageYou = true;
+				return;
+			}
+
+			if (this.OnlyYou && !this.wasPreviousMessageYou)
 				return;
 
-			PluginLog.Information($"Triggered: {this.Name} with chat message: \"{messageStr}\" from {senderId} on chat: {type}");
+			this.wasPreviousMessageYou = false;
+
+			if (!Regex.IsMatch(message, this.RegexPattern))
+				return;
+
+			PluginLog.Information($"Triggered: {this.Name} with chat message: \"{message}\"");
 			this.Pattern.RunFor(this.Duration);
 		}
 	}

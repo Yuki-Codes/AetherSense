@@ -13,59 +13,74 @@ namespace AetherSense
 			{ "Chat Trigger", typeof(ChatTrigger) },
 		};
 
-		private static string[] addTriggerOptions;
-
-		static ConfigurationEditor()
-		{
-			List<string> op = new List<string>();
-			op.Add("...");
-			op.AddRange(triggerTypes.Keys);
-			addTriggerOptions = op.ToArray();
-		}
-
 		public static void OnGui()
 		{
-			int indexToDelete = -1;
-			for (int i = 0; i < Plugin.Configuration.Triggers.Count; i++)
+			if (ImGui.BeginTabBar("##ConfigTabBar", ImGuiTabBarFlags.None))
 			{
-				bool keep = Plugin.Configuration.Triggers[i].OnEditorGuiTop(i);
-				if (!keep)
+				if (ImGui.BeginTabItem("Triggers"))
 				{
-					indexToDelete = i;
+					ImGui.Columns(2, "##TriggerBar", false);
+					ImGui.SetColumnWidth(0, 150);
+
+					if (ImGui.Button("Reset Triggers"))
+					{
+						Configuration defaultConfig = Configuration.GetDefaultConfiguration();
+						Plugin.Configuration.Triggers = defaultConfig.Triggers;
+					}
+
+					ImGui.NextColumn();
+					if (ImGui.BeginCombo("Add New Trigger", null, ImGuiComboFlags.NoPreview))
+					{
+						foreach (KeyValuePair<string, Type> keyVal in triggerTypes)
+						{
+							if (ImGui.Selectable(keyVal.Key))
+							{
+								TriggerBase trigger = (TriggerBase)Activator.CreateInstance(keyVal.Value);
+								Plugin.Configuration.Triggers.Add(trigger);
+								trigger.Name = "New " + keyVal.Key;
+							}
+						}
+
+						ImGui.EndCombo();
+					}
+
+					ImGui.Columns(1);
+
+					ImGui.Separator();
+
+					int indexToDelete = -1;
+					for (int i = 0; i < Plugin.Configuration.Triggers.Count; i++)
+					{
+						bool keep = Plugin.Configuration.Triggers[i].OnEditorGuiTop(i);
+						if (!keep)
+						{
+							indexToDelete = i;
+						}
+					}
+
+					if (indexToDelete != -1)
+						Plugin.Configuration.Triggers.RemoveAt(indexToDelete);
+
+					ImGui.EndTabItem();
 				}
+				
+				ImGui.EndTabBar();
 			}
 
-			if (indexToDelete != -1)
-				Plugin.Configuration.Triggers.RemoveAt(indexToDelete);
-			
-			ImGui.Separator();
-			int currentItem = 0;
-			ImGui.Combo("Add Trigger", ref currentItem, addTriggerOptions, addTriggerOptions.Length);
-	
-			if (currentItem != 0)
-			{
-				string selected = addTriggerOptions[currentItem];
-				Type t = triggerTypes[selected];
-				TriggerBase trigger = (TriggerBase)Activator.CreateInstance(t);
-				Plugin.Configuration.Triggers.Add(trigger);
-				trigger.Name = "New " + selected;
-			}
-
+			// If it wasn't clear before that I dont know how to work ImGUI, I hope this clears it up for you:
+			// We need 32px of space to accomodate the bottom bar, so...
+			ImGui.Spacing();
+			ImGui.Spacing();
+			ImGui.Spacing();
+			ImGui.Spacing();
+			ImGui.Spacing();
+			ImGui.Spacing();
 			ImGui.Spacing();
 
-			if (ImGui.Button("Constant 1 second"))
-			{
-				ConstantPattern p = new ConstantPattern();
-				p.RunFor(1000);
-			}
-			ImGui.SameLine();
-			if (ImGui.Button("Pulse 10 second"))
-			{
-				PulsePattern p = new PulsePattern();
-				p.UpDuration = 500;
-				p.RunFor(10000);
-			}
-			ImGui.SameLine();
+			// Now set the rendering cursor to 32pixels above the window bottom.
+			ImGui.SetCursorPosY(ImGui.GetWindowHeight() - 32);
+			ImGui.Separator();
+
 			if (ImGui.Button("Save"))
 			{
 				Plugin.Configuration.Save();

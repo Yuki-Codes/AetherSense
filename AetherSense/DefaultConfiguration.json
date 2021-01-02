@@ -3,8 +3,9 @@
   "Triggers": [
     {
       "$type": "AetherSense.Triggers.ChatTrigger, AetherSense",
-      "Duration": 1000,
-      "RegexPattern": "Critical! The",
+      "OnlyYou": true,
+      "Duration": 500,
+      "RegexPattern": "Critical!",
       "Name": "Critical Hit Trigger",
       "Pattern": {
         "$type": "AetherSense.Patterns.ConstantPattern, AetherSense",
@@ -13,7 +14,19 @@
     },
     {
       "$type": "AetherSense.Triggers.ChatTrigger, AetherSense",
+      "OnlyYou": true,
+      "Duration": 250,
+      "RegexPattern": "takes [0-9]+ damage.",
+      "Name": "Damage dealt Trigger",
+      "Pattern": {
+        "$type": "AetherSense.Patterns.ConstantPattern, AetherSense",
+        "Intensity": 1.0
+      }
+    },
+    {
+      "$type": "AetherSense.Triggers.ChatTrigger, AetherSense",
       "Duration": 1000,
+      "OnlyYou": true,
       "RegexPattern": "recovers [0-9]+ HP.",
       "Name": "Healed Trigger",
       "Pattern": {
@@ -24,6 +37,7 @@
     {
       "$type": "AetherSense.Triggers.ChatTrigger, AetherSense",
       "Duration": 1000,
+      "OnlyYou": false,
       "RegexPattern": "recover [0-9]+ HP.",
       "Name": "Healed Self Trigger",
       "Pattern": {
@@ -34,6 +48,7 @@
     {
       "$type": "AetherSense.Triggers.ChatTrigger, AetherSense",
       "Duration": 1000,
+      "OnlyYou": false,
       "RegexPattern": "You begin casting",
       "Name": "Casting Trigger",
       "Pattern": {
@@ -44,6 +59,7 @@
     {
       "$type": "AetherSense.Triggers.ChatTrigger, AetherSense",
       "Duration": 500,
+      "OnlyYou": false,
       "RegexPattern": "You cast",
       "Name": "Casted Trigger",
       "Pattern": {

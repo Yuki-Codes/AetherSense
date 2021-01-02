@@ -13,8 +13,15 @@ namespace AetherSense
 				Task.Run(async () => await Plugin.Buttplug.ScanAsync());
 			}
 
-			float i = (float)Plugin.Devices.Intensity;
-			ImGui.SliderFloat("Status", ref i, 0, 1);
+			ImGui.SameLine();
+			if (ImGui.Button("Test Pulse"))
+			{
+				ConstantPattern p = new ConstantPattern();
+				p.RunFor(1000);
+			}
+			ImGui.SameLine();
+
+			ImGui.ProgressBar((float)Plugin.Devices.Intensity);
 
 			ImGui.Text($"Patterns: {PatternBase.ActivePatterns.Count}");
 

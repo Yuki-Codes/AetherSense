@@ -10,6 +10,9 @@ namespace AetherSense
 	{
 		public static string GetPluginDirectory(this DalamudPluginInterface self)
 		{
+			if (self == null)
+				return ".";
+
 			Type pluginInterfaceType = typeof(DalamudPluginInterface);
 			FieldInfo configsField = pluginInterfaceType.GetField("configs", BindingFlags.Instance | BindingFlags.NonPublic);
 			FieldInfo pluginNameField = pluginInterfaceType.GetField("pluginName", BindingFlags.Instance | BindingFlags.NonPublic);
