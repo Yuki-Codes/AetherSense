@@ -15,6 +15,8 @@ namespace AetherSense
 
 		public static void OnGui()
 		{
+			ImGui.Text("Aether sense is disabled while this window is visible.");
+
 			bool enabled = Plugin.Configuration.Enabled;
 			ImGui.Checkbox("Enabled", ref enabled);
 			Plugin.Configuration.Enabled = enabled;
@@ -70,22 +72,6 @@ namespace AetherSense
 				
 				ImGui.EndTabBar();
 			}
-
-			// If it wasn't clear before that I dont know how to work ImGUI, I hope this clears it up for you:
-			// We need 32px of space to accomodate the bottom bar, so...
-			ImGui.Spacing();
-			ImGui.Spacing();
-			ImGui.Spacing();
-			ImGui.Spacing();
-			ImGui.Spacing();
-			ImGui.Spacing();
-			ImGui.Spacing();
-
-			// Now set the rendering cursor to 32pixels above the window bottom.
-			ImGui.SetCursorPosY(ImGui.GetWindowHeight() - 38);
-			ImGui.Separator();
-
-			ImGui.Text("Aether sense will not process triggers \nwhile this window is visible.");
 		}
 	}
 }
