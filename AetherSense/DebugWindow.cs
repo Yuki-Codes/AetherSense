@@ -18,10 +18,13 @@ namespace AetherSense
 
 			ImGui.Text($"Patterns: {PatternBase.ActivePatterns.Count}");
 
-			foreach (PatternBase pattern in PatternBase.ActivePatterns)
+			lock (PatternBase.ActivePatterns)
 			{
-				string ac = pattern.Active ? "O" : "X";
-				ImGui.Text($"    {ac} {pattern.GetType().Name} - {pattern.DurationLeft}ms");
+				foreach (PatternBase pattern in PatternBase.ActivePatterns)
+				{
+					string ac = pattern.Active ? "O" : "X";
+					ImGui.Text($"    {ac} {pattern.GetType().Name} - {pattern.DurationLeft}ms");
+				}
 			}
 
 			ImGui.Text($"Devices: {Plugin.Devices.Count}");
