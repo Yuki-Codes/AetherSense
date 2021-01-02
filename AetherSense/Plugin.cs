@@ -79,11 +79,11 @@ namespace AetherSense
 				await Buttplug.ConnectAsync(connectorOptions);
 
 				PluginLog.Information("Scan for devices");
-				await Buttplug.ScanAsync();
+				await Buttplug.StartScanningAsync();
 
 				while (this.enabled)
 				{
-					await Devices.Write();
+					await Devices.Write(32);
 
 					// 33 ms = 30fps max
 					await Task.Delay(32);

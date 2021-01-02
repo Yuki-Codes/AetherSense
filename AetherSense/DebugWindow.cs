@@ -19,9 +19,15 @@ namespace AetherSense
 				ConstantPattern p = new ConstantPattern();
 				p.RunFor(1000);
 			}
-			ImGui.SameLine();
+			
 
-			ImGui.ProgressBar((float)Plugin.Devices.Intensity);
+			ImGui.Text(Plugin.Devices.DesiredIntensity.ToString("F2"));
+			ImGui.SameLine();
+			ImGui.Text("/");
+			ImGui.SameLine();
+			ImGui.Text(Plugin.Devices.Maximum.ToString("F2"));
+			ImGui.SameLine();
+			ImGui.ProgressBar((float)Plugin.Devices.CurrentIntensity);
 
 			ImGui.Text($"Patterns: {PatternBase.ActivePatterns.Count}");
 

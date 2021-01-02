@@ -18,8 +18,8 @@ namespace AetherSense.Patterns
 
 		protected double DevicesIntensity
 		{
-			get => Plugin.Devices.Intensity;
-			set => Plugin.Devices.Intensity = value;
+			get => Plugin.Devices.DesiredIntensity;
+			set => Plugin.Devices.DesiredIntensity = value;
 		}
 
 		private Task lastRunTask;
@@ -33,7 +33,7 @@ namespace AetherSense.Patterns
 			if (this.Active)
 			{
 				PluginLog.Information("Extend pattern: " + this.GetType().Name + " for " + duration);
-				this.DurationLeft += duration;
+				this.DurationLeft = Math.Max(this.DurationLeft, duration);
 				return;
 			}
 
@@ -48,7 +48,7 @@ namespace AetherSense.Patterns
 			if (this.Active)
 			{
 				PluginLog.Information("Extend pattern: " + this.GetType().Name + " for " + duration);
-				this.DurationLeft += duration;
+				this.DurationLeft = Math.Max(this.DurationLeft, duration);
 				return;
 			}
 
