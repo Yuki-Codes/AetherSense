@@ -21,7 +21,7 @@ namespace AetherSense
 
 		private bool enabled;
 		private bool debugVisible;
-		private bool visible;
+		private bool configurationIsVisible;
 		private bool triggersLoaded = false;
 
 		public void Initialize(DalamudPluginInterface pluginInterface)
@@ -32,7 +32,7 @@ namespace AetherSense
 			DalamudPluginInterface.CommandManager.AddHandler("/sense", "Opens the Aether Sense configuration window", this.OnSense);
 			DalamudPluginInterface.CommandManager.AddHandler("/senseDebug", "Opens the Aether Sense debug window", this.OnDebug);
 			DalamudPluginInterface.UiBuilder.OnBuildUi += OnGui;
-			DalamudPluginInterface.UiBuilder.OnOpenConfigUi += (s, e) => this.visible = true;
+			DalamudPluginInterface.UiBuilder.OnOpenConfigUi += (s, e) => this.configurationIsVisible = true;
 
 			Task.Run(this.InitializeAsync);
 
@@ -46,7 +46,7 @@ namespace AetherSense
 		/// <returns>an action to be invoked for ImGUI drawing</returns>
 		public Action InitializeMock()
 		{
-			this.visible = true;
+			this.configurationIsVisible = true;
 			this.debugVisible = true;
 			Configuration = Configuration.Load();
 			Task.Run(this.InitializeAsync);
@@ -98,6 +98,11 @@ namespace AetherSense
 		private void LoadTriggers()
 		{
 			PluginLog.Information("Loading Triggers");
+
+			// Don't attempt to load triggers if we're not actually in-game
+			if (Plugin.DalamudPluginInterface == null)
+				return;
+
 			this.triggersLoaded = true;
 			foreach (TriggerBase trigger in Configuration.Triggers)
 			{
@@ -134,10 +139,13 @@ namespace AetherSense
 				}
 			}
 
-			if (!this.visible)
+			if (!this.configurationIsVisible)
 			{
 				if (!this.triggersLoaded)
+				{
+					Configuration.Save();
 					this.LoadTriggers();
+				}
 
 				return;
 			}
@@ -145,7 +153,7 @@ namespace AetherSense
 			if (this.triggersLoaded)
 				this.Unloadtriggers();
 
-			if (ImGui.Begin("Aether Sense", ref this.visible))
+			if (ImGui.Begin("Aether Sense", ref this.configurationIsVisible))
 			{
 				ConfigurationEditor.OnGui();
 			}
@@ -167,7 +175,7 @@ namespace AetherSense
 
 		private void OnSense(string args)
 		{
-			this.visible = true;
+			this.configurationIsVisible = true;
 		}
 
 		private void OnDebug(string args)

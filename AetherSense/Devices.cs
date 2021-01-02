@@ -48,6 +48,9 @@ namespace AetherSense
 
 			this.CurrentIntensity = this.DesiredIntensity / this.Maximum;
 
+			if (!Plugin.Configuration.Enabled)
+				this.CurrentIntensity = 0;
+
 			foreach (Device device in this.devices)
 			{
 				device.Intensity = this.CurrentIntensity;

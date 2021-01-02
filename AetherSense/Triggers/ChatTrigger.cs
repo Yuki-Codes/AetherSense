@@ -67,6 +67,10 @@ namespace AetherSense.Triggers
 
 		public void OnChatMessage(string message)
 		{
+			// Don't process any chat messages if the plugin is globally disabled
+			if (!Plugin.Configuration.Enabled)
+				return;
+
 			if (message.StartsWith("You"))
 			{
 				this.wasPreviousMessageYou = true;

@@ -17,6 +17,7 @@ namespace AetherSense
 			Formatting = Formatting.Indented,
 		};
 
+		public bool Enabled { get; set; } = true;
 		public List<TriggerBase> Triggers { get; set; } = new List<TriggerBase>();
 
 		public static Configuration Load()

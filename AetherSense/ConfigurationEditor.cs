@@ -15,6 +15,10 @@ namespace AetherSense
 
 		public static void OnGui()
 		{
+			bool enabled = Plugin.Configuration.Enabled;
+			ImGui.Checkbox("Enabled", ref enabled);
+			Plugin.Configuration.Enabled = enabled;
+
 			if (ImGui.BeginTabBar("##ConfigTabBar", ImGuiTabBarFlags.None))
 			{
 				if (ImGui.BeginTabItem("Triggers"))
@@ -78,13 +82,10 @@ namespace AetherSense
 			ImGui.Spacing();
 
 			// Now set the rendering cursor to 32pixels above the window bottom.
-			ImGui.SetCursorPosY(ImGui.GetWindowHeight() - 32);
+			ImGui.SetCursorPosY(ImGui.GetWindowHeight() - 38);
 			ImGui.Separator();
 
-			if (ImGui.Button("Save"))
-			{
-				Plugin.Configuration.Save();
-			}
+			ImGui.Text("Aether sense will not process triggers \nwhile this window is visible.");
 		}
 	}
 }

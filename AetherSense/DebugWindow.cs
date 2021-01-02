@@ -19,15 +19,21 @@ namespace AetherSense
 				ConstantPattern p = new ConstantPattern();
 				p.RunFor(1000);
 			}
-			
 
-			ImGui.Text(Plugin.Devices.DesiredIntensity.ToString("F2"));
-			ImGui.SameLine();
-			ImGui.Text("/");
-			ImGui.SameLine();
-			ImGui.Text(Plugin.Devices.Maximum.ToString("F2"));
-			ImGui.SameLine();
-			ImGui.ProgressBar((float)Plugin.Devices.CurrentIntensity);
+			if (Plugin.Configuration.Enabled)
+			{
+				ImGui.Text(Plugin.Devices.DesiredIntensity.ToString("F2"));
+				ImGui.SameLine();
+				ImGui.Text("/");
+				ImGui.SameLine();
+				ImGui.Text(Plugin.Devices.Maximum.ToString("F2"));
+				ImGui.SameLine();
+				ImGui.ProgressBar((float)Plugin.Devices.CurrentIntensity);
+			}
+			else
+			{
+				ImGui.Text("AetherSense is disabled");
+			}
 
 			ImGui.Text($"Patterns: {PatternBase.ActivePatterns.Count}");
 
