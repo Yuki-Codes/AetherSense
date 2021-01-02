@@ -15,6 +15,7 @@ namespace AetherSense
 		public static DalamudPluginInterface DalamudPluginInterface;
 		public static Configuration Configuration;
 		public static Devices Devices = new Devices();
+		public static ButtplugClient Buttplug;
 
 		public string Name => "AetherSense";
 
@@ -59,10 +60,10 @@ namespace AetherSense
 
 			try
 			{
-				ButtplugClient client = new ButtplugClient("Aether Sense");
-				client.DeviceAdded += this.OnDeviceAdded;
-				client.DeviceRemoved += this.OnDeviceRemoved;
-				client.ScanningFinished += (o, e) =>
+				Buttplug = new ButtplugClient("Aether Sense");
+				Buttplug.DeviceAdded += this.OnDeviceAdded;
+				Buttplug.DeviceRemoved += this.OnDeviceRemoved;
+				Buttplug.ScanningFinished += (o, e) =>
 				{
 					PluginLog.Information("Scan for devices complete");
 					/*Task.Run(async () =>
@@ -75,10 +76,10 @@ namespace AetherSense
 				PluginLog.Information("Connect to embedded buttplug server");
 				ButtplugEmbeddedConnectorOptions connectorOptions = new ButtplugEmbeddedConnectorOptions();
 				connectorOptions.ServerName = "Aether Sense Server";
-				await client.ConnectAsync(connectorOptions);
+				await Buttplug.ConnectAsync(connectorOptions);
 
 				PluginLog.Information("Scan for devices");
-				await client.ScanAsync();
+				await Buttplug.ScanAsync();
 
 				while (this.enabled)
 				{

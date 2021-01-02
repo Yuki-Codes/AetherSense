@@ -1,4 +1,5 @@
-﻿using AetherSense.Patterns;
+﻿using System.Threading.Tasks;
+using AetherSense.Patterns;
 using ImGuiNET;
 
 namespace AetherSense
@@ -7,6 +8,11 @@ namespace AetherSense
 	{
 		public static void OnGui()
 		{
+			if (ImGui.Button("Scan"))
+			{
+				Task.Run(async () => await Plugin.Buttplug.ScanAsync());
+			}
+
 			float i = (float)Plugin.Devices.Intensity;
 			ImGui.SliderFloat("Status", ref i, 0, 1);
 
