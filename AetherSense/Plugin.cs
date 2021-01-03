@@ -106,6 +106,9 @@ namespace AetherSense
 			this.triggersLoaded = true;
 			foreach (TriggerBase trigger in Configuration.Triggers)
 			{
+				if (!trigger.Enabled)
+					continue;
+
 				PluginLog.Information("    > " + trigger.Name);
 				trigger.Attach();
 			}

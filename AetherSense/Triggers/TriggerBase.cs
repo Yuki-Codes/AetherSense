@@ -15,6 +15,12 @@ namespace AetherSense.Triggers
 			set => this.name = value;
 		}
 
+		public bool Enabled
+		{
+			get => this.enabled;
+			set => this.enabled = value;
+		}
+
 		public PatternBase Pattern { get; set; } = new ConstantPattern();
 
 		public abstract void Attach();
