@@ -14,16 +14,13 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Buttplug" Version="1.0.4" />
+		<PackageReference Include="Buttplug" Version="1.0.5" GeneratePathProperty="true"/>
 		<PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<None Update="AetherSense.json">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
-		<None Update="buttplug_rs_ffi.dll">
-		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 		<None Update="DefaultConfiguration.json">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -46,6 +43,12 @@
 			<HintPath>$(AppData)\XIVLauncher\addon\Hooks\ImGuiScene.dll</HintPath>
 			<Private>False</Private>
 		</Reference>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Update="$(PkgButtplug)\contentFiles\any\netstandard2.0\buttplug_rs_ffi.dll">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
 	</ItemGroup>
 
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
