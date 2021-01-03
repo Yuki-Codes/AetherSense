@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Buttplug;
+using Dalamud.Plugin;
 
 namespace AetherSense
 {
@@ -53,8 +54,15 @@ namespace AetherSense
 
 			foreach (Device device in this.devices)
 			{
-				device.Intensity = this.CurrentIntensity;
-				await device.Write();
+				try
+				{
+					device.Intensity = this.CurrentIntensity;
+					await device.Write();
+				}
+				catch (Exception ex)
+				{
+					PluginLog.Error(ex, "Failed to write to device");
+				}
 			}
 		}
 	}
