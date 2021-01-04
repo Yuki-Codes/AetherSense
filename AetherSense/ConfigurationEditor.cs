@@ -15,11 +15,22 @@ namespace AetherSense
 
 		public static void OnGui()
 		{
-			ImGui.Text("Aether sense is disabled while this window is visible.");
+			if (Plugin.lastConnectionError != null)
+			{
+				ImGui.Text("Failed to connect to Buttplug server:\nIs the server running and available?");
+			}
+			else
+			{
+				ImGui.Text("Aether sense is disabled while this window is visible.");
+			}
 
 			bool enabled = Plugin.Configuration.Enabled;
 			ImGui.Checkbox("Enabled", ref enabled);
 			Plugin.Configuration.Enabled = enabled;
+
+			string address = Plugin.Configuration.ServerAddress;
+			ImGui.InputText("Server", ref address, 99);
+			Plugin.Configuration.ServerAddress = address;
 
 			if (ImGui.BeginTabBar("##ConfigTabBar", ImGuiTabBarFlags.None))
 			{

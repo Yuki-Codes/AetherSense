@@ -33,11 +33,13 @@ namespace AetherSense.Triggers
 
 		public override void Attach()
 		{
+			base.Attach();
 			Plugin.DalamudPluginInterface.Framework.Gui.Chat.OnChatMessage += this.OnChatMessage;
 		}
 
 		public override void Detach()
 		{
+			base.Detach();
 			Plugin.DalamudPluginInterface.Framework.Gui.Chat.OnChatMessage -= this.OnChatMessage;
 		}
 

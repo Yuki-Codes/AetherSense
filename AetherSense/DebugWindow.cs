@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using AetherSense.Patterns;
+using AetherSense.Triggers;
 using ImGuiNET;
 
 namespace AetherSense
@@ -35,19 +36,27 @@ namespace AetherSense
 				ImGui.Text("AetherSense is disabled");
 			}
 
-			ImGui.Text($"Patterns: {PatternBase.ActivePatterns.Count}");
-
-			lock (PatternBase.ActivePatterns)
+			ImGui.Text($"Triggers: {Plugin.Configuration.Triggers.Count}");
+			int attachedCount = 0;
+			foreach (TriggerBase trigger in Plugin.Configuration.Triggers)
 			{
-				foreach (PatternBase pattern in PatternBase.ActivePatterns)
+				string ac = trigger.IsAttached ? "X" : " ";
+				ImGui.Text($"    [{ac}] {trigger.Name}");
+
+				if (trigger.IsAttached)
 				{
-					string ac = pattern.Active ? "O" : "X";
-					ImGui.Text($"    {ac} {pattern.GetType().Name} - {pattern.DurationLeft}ms");
+					attachedCount++;
+
+					if (trigger.Pattern != null && trigger.Pattern.Active)
+					{
+						ImGui.Text($"        {trigger.Pattern.GetType().Name} - {trigger.Pattern.DurationLeft}ms");
+					}
 				}
 			}
 
-			ImGui.Text($"Devices: {Plugin.Devices.Count}");
+			ImGui.Text($"{attachedCount} loaded");
 
+			ImGui.Text($"Devices: {Plugin.Devices.Count}");
 			foreach (Device device in Plugin.Devices.All)
 			{
 				ImGui.Text($"    > {device.ClientDevice.Name}");

@@ -1,6 +1,7 @@
 ﻿using System.Numerics;
 using AetherSense.Patterns;
 using ImGuiNET;
+using Newtonsoft.Json;
 
 namespace AetherSense.Triggers
 {
@@ -21,10 +22,20 @@ namespace AetherSense.Triggers
 			set => this.enabled = value;
 		}
 
+		[JsonIgnore]
+		public bool IsAttached { get; private set; }
+
 		public PatternBase Pattern { get; set; } = new ConstantPattern();
 
-		public abstract void Attach();
-		public abstract void Detach();
+		public virtual void Attach()
+		{
+			this.IsAttached = true;
+		}
+
+		public virtual void Detach()
+		{
+			this.IsAttached = false;
+		}
 
 		public bool OnEditorGuiTop(int index)
 		{

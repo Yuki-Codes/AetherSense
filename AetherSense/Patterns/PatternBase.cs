@@ -8,8 +8,6 @@ namespace AetherSense.Patterns
 {
 	public abstract class PatternBase
 	{
-		public static List<PatternBase> ActivePatterns = new List<PatternBase>();
-
 		[JsonIgnore]
 		public bool Active { get; private set; }
 
@@ -72,11 +70,6 @@ namespace AetherSense.Patterns
 
 		public virtual void Begin()
 		{
-			lock (ActivePatterns)
-			{
-				ActivePatterns.Add(this);
-			}
-
 			this.Active = true;
 
 			if (this.lastRunTask != null && !this.lastRunTask.IsCompleted && !this.lastRunTask.IsFaulted)
@@ -88,11 +81,6 @@ namespace AetherSense.Patterns
 		public virtual void End()
 		{
 			this.Active = false;
-
-			lock (ActivePatterns)
-			{
-				ActivePatterns.Remove(this);
-			}
 
 			if (this.lastRunTask.IsFaulted)
 			{
