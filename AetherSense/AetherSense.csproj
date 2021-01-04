@@ -8,13 +8,13 @@
 		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
 		<DocumentationFile></DocumentationFile>
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-		<AssemblyVersion>1.0.0.3</AssemblyVersion>
-		<FileVersion>1.0.0.2</FileVersion>
-		<Version>1.0.0.3</Version>
+		<AssemblyVersion>1.0.0.4</AssemblyVersion>
+		<FileVersion>1.0.0.4</FileVersion>
+		<Version>1.0.0.4</Version>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Buttplug" Version="1.0.5" GeneratePathProperty="true"/>
+		<PackageReference Include="Buttplug" Version="1.0.5" GeneratePathProperty="true" />
 		<PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
 	</ItemGroup>
 
