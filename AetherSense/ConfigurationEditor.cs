@@ -29,7 +29,7 @@ namespace AetherSense
 			}
 			else
 			{
-				ImGui.Text("Aether sense is disabled while this window is visible.");
+				ImGui.Text("Triggers are disabled while this window is visible.");
 			}
 
 			bool enabled = Plugin.Configuration.Enabled;

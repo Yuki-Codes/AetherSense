@@ -30,13 +30,15 @@ namespace AetherSense
 		{
 			DalamudPluginInterface = pluginInterface;
 			////Configuration = DalamudPluginInterface.GetPluginConfig() as Configuration ?? new Configuration();
-			Configuration = Configuration.Load();
 			DalamudPluginInterface.CommandManager.AddHandler("/sense", "Opens the Aether Sense configuration window", this.OnShowConfiguration);
 			DalamudPluginInterface.CommandManager.AddHandler("/senseDebug", "Opens the Aether Sense debug window", this.OnShowDebug);
 			DalamudPluginInterface.UiBuilder.OnBuildUi += OnGui;
 			DalamudPluginInterface.UiBuilder.OnOpenConfigUi += (s, e) => this.configurationIsVisible = true;
 
-			Task.Run(this.InitializeAsync);
+			Configuration = Configuration.Load();
+			Task.Run(this.Connect);
+			_ = Task.Run(this.Run);
+			this.LoadTriggers();
 		}
 
 		/// <summary>
@@ -47,7 +49,9 @@ namespace AetherSense
 		public Action InitializeMock()
 		{
 			Configuration = Configuration.Load();
-			Task.Run(this.InitializeAsync);
+			Task.Run(this.Connect);
+			_ = Task.Run(this.Run);
+			this.LoadTriggers();
 
 			Task.Run(async () =>
 			{
@@ -59,16 +63,13 @@ namespace AetherSense
 			return this.OnGui;
 		}
 
-		public async Task InitializeAsync()
+		public async Task Connect()
 		{
 			if (!Configuration.Enabled)
 				return;
 
-			PluginLog.Information("Initializing Buttplug Interface");
-			this.enabled = true;
-
-			_ = Task.Run(this.Run);
-
+			PluginLog.Information("Connecting to buttplug");
+			
 			try
 			{
 				if (Buttplug == null)
@@ -93,7 +94,6 @@ namespace AetherSense
 
 					try
 					{
-
 						/*PluginLog.Information("Connect to embedded buttplug server");
 						ButtplugEmbeddedConnectorOptions connectorOptions = new ButtplugEmbeddedConnectorOptions();
 						connectorOptions.ServerName = "Aether Sense Server";*/
@@ -112,8 +112,6 @@ namespace AetherSense
 
 				PluginLog.Information("Scan for devices");
 				await Buttplug.StartScanningAsync();
-
-				this.LoadTriggers();
 			}
 			catch (Exception ex)
 			{
@@ -123,6 +121,7 @@ namespace AetherSense
 
 		private async Task Run()
 		{
+			this.enabled = true;
 			PluginLog.Information("Running");
 			while (this.enabled)
 			{
@@ -188,7 +187,7 @@ namespace AetherSense
 			{
 				this.configurationWasVisible = false;
 				Configuration.Save();
-				this.LoadTriggers();
+				Task.Run(() => this.Initialize(DalamudPluginInterface));
 				return;
 			}
 		}

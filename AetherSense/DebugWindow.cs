@@ -14,13 +14,6 @@ namespace AetherSense
 				Task.Run(async () => await Plugin.Buttplug.ScanAsync());
 			}
 
-			ImGui.SameLine();
-			if (ImGui.Button("Test Pulse"))
-			{
-				ConstantPattern p = new ConstantPattern();
-				p.RunFor(1000);
-			}
-
 			if (Plugin.Configuration.Enabled)
 			{
 				ImGui.Text(Plugin.Devices.DesiredIntensity.ToString("F2"));
