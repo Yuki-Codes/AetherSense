@@ -23,11 +23,11 @@ namespace AetherSense.Patterns
 			while (this.Active)
 			{
 				double intensity = 0.5 + (Math.Sin(t * (4000 / this.Frequency)) * 0.5f);
-				t += 0.1;
+				t += 0.016;
 
 				this.DevicesIntensity = this.MinIntensity + (intensity * this.MaxIntensity);
 
-				await Task.Delay(100);
+				await Task.Delay(16);
 			}
 		}
 	}

@@ -46,10 +46,16 @@ namespace AetherSense
 		/// <returns>an action to be invoked for ImGUI drawing</returns>
 		public Action InitializeMock()
 		{
-			this.configurationIsVisible = true;
-			this.debugVisible = true;
 			Configuration = Configuration.Load();
 			Task.Run(this.InitializeAsync);
+
+			Task.Run(async () =>
+			{
+				await Task.Delay(500);
+				this.OnShowDebug(null);
+				this.OnShowConfiguration(null);
+			});
+
 			return this.OnGui;
 		}
 
@@ -60,6 +66,8 @@ namespace AetherSense
 
 			PluginLog.Information("Initializing Buttplug Interface");
 			this.enabled = true;
+
+			_ = Task.Run(this.Run);
 
 			try
 			{
@@ -105,38 +113,49 @@ namespace AetherSense
 				PluginLog.Information("Scan for devices");
 				await Buttplug.StartScanningAsync();
 
-				PluginLog.Information("Loading Triggers");
-				foreach (TriggerBase trigger in Configuration.Triggers)
-				{
-					if (!trigger.Enabled || Plugin.DalamudPluginInterface == null)
-						continue;
-
-					PluginLog.Information("    > " + trigger.Name);
-					trigger.Attach();
-				}
-
-				PluginLog.Information("Running");
-				while (this.enabled)
-				{
-					await Devices.Write(Configuration.Triggers, 32);
-
-					// 33 ms = 30fps max
-					await Task.Delay(32);
-				}
-
-				// Unload triggers as we are stopping.
-				PluginLog.Information("Unloading Triggers");
-				foreach (TriggerBase trigger in Configuration.Triggers)
-				{
-					if (Plugin.DalamudPluginInterface == null)
-						continue;
-
-					trigger.Detach();
-				}
+				this.LoadTriggers();
 			}
 			catch (Exception ex)
 			{
 				PluginLog.Error(ex, "Buttplug exception");
+			}
+		}
+
+		private async Task Run()
+		{
+			PluginLog.Information("Running");
+			while (this.enabled)
+			{
+				await Devices.Write(Configuration.Triggers, 32);
+
+				// 33 ms = 30fps max
+				await Task.Delay(32);
+			}
+		}
+
+		private void LoadTriggers()
+		{
+			PluginLog.Information("Loading Triggers");
+			foreach (TriggerBase trigger in Configuration.Triggers)
+			{
+				if (!trigger.Enabled || Plugin.DalamudPluginInterface == null)
+					continue;
+
+				PluginLog.Information("    > " + trigger.Name);
+				trigger.Attach();
+			}
+		}
+
+		private void UnloadTriggers()
+		{
+			// Unload triggers as we are stopping.
+			PluginLog.Information("Unloading Triggers");
+			foreach (TriggerBase trigger in Configuration.Triggers)
+			{
+				if (Plugin.DalamudPluginInterface == null)
+					continue;
+
+				trigger.Detach();
 			}
 		}
 
@@ -145,6 +164,7 @@ namespace AetherSense
 			DalamudPluginInterface.CommandManager.ClearHandlers();
 			DalamudPluginInterface.Dispose();
 
+			this.UnloadTriggers();
 			this.enabled = false;
 		}
 
@@ -168,7 +188,7 @@ namespace AetherSense
 			{
 				this.configurationWasVisible = false;
 				Configuration.Save();
-				Task.Run(this.InitializeAsync);
+				this.LoadTriggers();
 				return;
 			}
 		}
@@ -187,7 +207,7 @@ namespace AetherSense
 
 		private void OnShowConfiguration(string args)
 		{
-			this.enabled = false;
+			this.UnloadTriggers();
 			this.configurationIsVisible = true;
 		}
 
