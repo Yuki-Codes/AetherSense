@@ -1,5 +1,8 @@
-﻿using System.Numerics;
+﻿using System;
+using System.Collections.Generic;
+using System.Numerics;
 using AetherSense.Patterns;
+using AetherSense.Utils;
 using ImGuiNET;
 using Newtonsoft.Json;
 
@@ -49,10 +52,39 @@ namespace AetherSense.Triggers
 
 			if (open)
 			{
-				ImGui.InputText("Name", ref this.name, 32);
 				ImGui.Checkbox("Enable", ref this.enabled);
+				ImGui.SameLine();
+				ImGui.InputText("Name", ref this.name, 32);
 
+				ImGui.Separator();
+				ImGui.Columns(2);
+
+				ImGui.Spacing();
 				this.OnEditorGui();
+
+				ImGui.NextColumn();
+
+				if (ImGui.BeginCombo("Pattern", NameUtility.ToName(this.Pattern.GetType().Name)))
+				{
+					foreach (Type type in ConfigurationEditor.PatternTypes)
+					{
+						if (ImGui.Selectable(NameUtility.ToName(type.Name)))
+						{
+							this.Pattern = (PatternBase)Activator.CreateInstance(type);
+						}
+					}
+
+					ImGui.EndCombo();
+				}
+
+
+				if (this.Pattern != null)
+				{
+					this.Pattern.OnEditorGuiTop();
+				}
+
+				ImGui.NextColumn();
+				ImGui.Columns(1);
 			}
 
 			ImGui.PopID();

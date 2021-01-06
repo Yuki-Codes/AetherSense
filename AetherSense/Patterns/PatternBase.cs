@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Dalamud.Plugin;
+using ImGuiNET;
 using Newtonsoft.Json;
 
 namespace AetherSense.Patterns
@@ -14,23 +15,30 @@ namespace AetherSense.Patterns
 		[JsonIgnore]
 		public int DurationLeft { get; private set; }
 
-		protected double DevicesIntensity
-		{
-			get => Plugin.Devices.DesiredIntensity;
-			set => Plugin.Devices.DesiredIntensity = value;
-		}
+		[JsonIgnore]
+		public double DevicesIntensity { get; protected set; } = 0;
 
 		private Task lastRunTask;
 
+		public void OnEditorGuiTop()
+		{
+			ImGui.SameLine();
+			ImGui.PushButtonRepeat(true);
+			if (ImGui.ArrowButton("##TestButton", ImGuiDir.Right))
+			{
+				this.RunFor(1000);
+			}
+			ImGui.PushButtonRepeat(false);
 
+			this.OnEditorGui();
+		}
 
-		public abstract void OnEditorGui();
+		protected abstract void OnEditorGui();
 
 		public void RunFor(int duration)
 		{
 			if (this.Active)
 			{
-				PluginLog.Information("Extend pattern: " + this.GetType().Name + " for " + duration);
 				this.DurationLeft = Math.Max(this.DurationLeft, duration);
 				return;
 			}
@@ -45,14 +53,11 @@ namespace AetherSense.Patterns
 		{
 			if (this.Active)
 			{
-				PluginLog.Information("Extend pattern: " + this.GetType().Name + " for " + duration);
 				this.DurationLeft = Math.Max(this.DurationLeft, duration);
 				return;
 			}
 
 			this.DurationLeft = duration;
-
-			PluginLog.Information("Run pattern: " + this.GetType().Name + " for " + duration);
 
 			this.Begin();
 
@@ -88,6 +93,9 @@ namespace AetherSense.Patterns
 			}
 		}
 
-		protected abstract Task Run();
+		protected virtual Task Run()
+		{
+			return Task.CompletedTask;
+		}
 	}
 }

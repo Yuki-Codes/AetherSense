@@ -73,7 +73,7 @@ namespace AetherSense.Triggers
 			if (!Plugin.Configuration.Enabled)
 				return;
 
-			if (message.StartsWith("You"))
+			if (message.StartsWith("You") || message.StartsWith("Vous") || message.StartsWith("Du"))
 			{
 				this.wasPreviousMessageYou = true;
 				return;

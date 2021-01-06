@@ -44,13 +44,11 @@ namespace AetherSense
 				ImGui.Text($"    [{ac}] {trigger.Name}");
 
 				if (trigger.IsAttached)
-				{
 					attachedCount++;
 
-					if (trigger.Pattern != null && trigger.Pattern.Active)
-					{
-						ImGui.Text($"        {trigger.Pattern.GetType().Name} - {trigger.Pattern.DurationLeft}ms");
-					}
+				if (trigger.Pattern != null && trigger.Pattern.Active)
+				{
+					ImGui.Text($"        {trigger.Pattern.GetType().Name} - {trigger.Pattern.DurationLeft}ms");
 				}
 			}
 

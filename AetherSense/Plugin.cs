@@ -118,7 +118,7 @@ namespace AetherSense
 				PluginLog.Information("Running");
 				while (this.enabled)
 				{
-					await Devices.Write(32);
+					await Devices.Write(Configuration.Triggers, 32);
 
 					// 33 ms = 30fps max
 					await Task.Delay(32);

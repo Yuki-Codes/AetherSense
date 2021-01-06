@@ -3,14 +3,22 @@ using ImGuiNET;
 using AetherSense.Triggers;
 using System;
 using System.Collections.Generic;
+using AetherSense.Utils;
 
 namespace AetherSense
 {
 	public static class ConfigurationEditor
 	{
-		private static Dictionary<string, Type> triggerTypes = new Dictionary<string, Type>()
+		public static List<Type> TriggerTypes = new List<Type>()
 		{
-			{ "Chat Trigger", typeof(ChatTrigger) },
+			typeof(ChatTrigger),
+		};
+
+		public static List<Type> PatternTypes = new List<Type>()
+		{
+			typeof(ConstantPattern),
+			typeof(AlternatingPattern),
+			typeof(WavePattern)
 		};
 
 		public static void OnGui()
@@ -48,13 +56,13 @@ namespace AetherSense
 					ImGui.NextColumn();
 					if (ImGui.BeginCombo("Add New Trigger", null, ImGuiComboFlags.NoPreview))
 					{
-						foreach (KeyValuePair<string, Type> keyVal in triggerTypes)
+						foreach (Type type in TriggerTypes)
 						{
-							if (ImGui.Selectable(keyVal.Key))
+							if (ImGui.Selectable(NameUtility.ToName(type.Name)))
 							{
-								TriggerBase trigger = (TriggerBase)Activator.CreateInstance(keyVal.Value);
+								TriggerBase trigger = (TriggerBase)Activator.CreateInstance(type);
 								Plugin.Configuration.Triggers.Add(trigger);
-								trigger.Name = "New " + keyVal.Key;
+								trigger.Name = "New " + NameUtility.ToName(type.Name);
 							}
 						}
 

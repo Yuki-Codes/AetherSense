@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using AetherSense.Triggers;
 using Buttplug;
 using Dalamud.Plugin;
 
@@ -10,8 +11,7 @@ namespace AetherSense
 	{
 		private List<Device> devices = new List<Device>();
 
-		public double DesiredIntensity;
-
+		public double DesiredIntensity { get; private set; } = 0;
 		public double Maximum { get; private set; } = 1.0;
 		public double CurrentIntensity { get; set; }
 
@@ -38,8 +38,20 @@ namespace AetherSense
 			}
 		}
 
-		public async Task Write(int delta)
+		public async Task Write(List<TriggerBase> triggers, int delta)
 		{
+			this.DesiredIntensity = 0;
+			foreach (TriggerBase trigger in triggers)
+			{
+				if (!trigger.Enabled || trigger.Pattern == null)
+					continue;
+
+				if (!trigger.Pattern.Active)
+					continue;
+
+				this.DesiredIntensity += trigger.Pattern.DevicesIntensity;
+			}
+
 			// Get the maximum intensity
 			this.Maximum = Math.Max(this.DesiredIntensity, this.Maximum);
 			

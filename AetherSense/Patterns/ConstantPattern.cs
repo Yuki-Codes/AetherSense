@@ -5,28 +5,23 @@ namespace AetherSense.Patterns
 {
 	public class ConstantPattern : PatternBase
 	{
-		public double Intensity { get; set; } = 1.0;
+		private float intensity = 1.0f;
+
+		public float Intensity
+		{
+			get => this.intensity;
+			set => this.intensity = value;
+		}
 
 		public override void Begin()
 		{
 			base.Begin();
-			this.DevicesIntensity += this.Intensity;
+			this.DevicesIntensity = this.Intensity;
 		}
 
-		public override void End()
+		protected override void OnEditorGui()
 		{
-			base.End();
-			this.DevicesIntensity -= this.Intensity;
-		}
-
-		public override void OnEditorGui()
-		{
-			ImGui.Text("Hello There");
-		}
-
-		protected override Task Run()
-		{
-			return Task.CompletedTask;
+			ImGui.SliderFloat("Intensity", ref this.intensity, 0.0f, 1.0f);
 		}
 	}
 }
