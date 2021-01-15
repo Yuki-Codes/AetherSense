@@ -26,13 +26,12 @@ namespace AetherSense
 			double i = Math.Max(this.Intensity, 0);
 			i = Math.Min(i, 1);
 
+			await this.ClientDevice.SendVibrateCmd(i);
+
 			if (i <= 0)
 			{
+				await this.ClientDevice.SendVibrateCmd(0);
 				await this.ClientDevice.SendStopDeviceCmd();
-			}
-			else
-			{
-				await this.ClientDevice.SendVibrateCmd(i);
 			}
 		}
 	}

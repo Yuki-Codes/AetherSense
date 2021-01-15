@@ -9,9 +9,9 @@ namespace AetherSense
 	{
 		public static void OnGui()
 		{
-			if (ImGui.Button("Scan"))
+			if (ImGui.Button("Clear Devices"))
 			{
-				Task.Run(async () => await Plugin.Buttplug.ScanAsync());
+				Plugin.Devices.Clear();
 			}
 
 			if (Plugin.Configuration.Enabled)

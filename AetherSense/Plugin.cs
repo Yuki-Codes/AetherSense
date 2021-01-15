@@ -35,6 +35,8 @@ namespace AetherSense
 			DalamudPluginInterface.UiBuilder.OnBuildUi += OnGui;
 			DalamudPluginInterface.UiBuilder.OnOpenConfigUi += (s, e) => this.configurationIsVisible = true;
 
+			Devices.Clear();
+
 			Configuration = Configuration.Load();
 			Task.Run(this.Connect);
 			_ = Task.Run(this.Run);
@@ -79,12 +81,12 @@ namespace AetherSense
 					Buttplug.DeviceRemoved += this.OnDeviceRemoved;
 					Buttplug.ScanningFinished += (o, e) =>
 					{
-						PluginLog.Information("Scan for devices complete");
-					/*Task.Run(async () =>
-					{
-						await client.StopScanningAsync();
-						await client.StartScanningAsync();
-					});*/
+						Task.Run(async () =>
+						{
+							await Task.Delay(1000);
+							await Buttplug.StopScanningAsync();
+							await Buttplug.StartScanningAsync();
+						});
 					};
 				}
 
@@ -125,10 +127,8 @@ namespace AetherSense
 			PluginLog.Information("Running");
 			while (this.enabled)
 			{
-				await Devices.Write(Configuration.Triggers, 32);
-
-				// 33 ms = 30fps max
-				await Task.Delay(32);
+				await Devices.Write(Configuration.Triggers, 250);
+				await Task.Delay(250);
 			}
 		}
 
@@ -160,6 +160,7 @@ namespace AetherSense
 
 		public void Dispose()
 		{
+			DalamudPluginInterface.UiBuilder.OnBuildUi -= OnGui;
 			DalamudPluginInterface.CommandManager.ClearHandlers();
 			DalamudPluginInterface.Dispose();
 
@@ -187,7 +188,9 @@ namespace AetherSense
 			{
 				this.configurationWasVisible = false;
 				Configuration.Save();
-				Task.Run(() => this.Initialize(DalamudPluginInterface));
+				Task.Run(this.Connect);
+				_ = Task.Run(this.Run);
+				this.LoadTriggers();
 				return;
 			}
 		}

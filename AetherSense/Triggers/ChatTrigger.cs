@@ -50,7 +50,7 @@ namespace AetherSense.Triggers
 			if (ImGui.IsItemHovered())
 				ImGui.SetTooltip("This trigger will only work if the proceding line in the log begins with 'You', eg. 'You cast' or 'You use'");
 
-			ImGui.InputText("Regex", ref this.regexPattern, 32);
+			ImGui.InputText("Regex", ref this.regexPattern, 100);
 			if (ImGui.IsItemHovered())
 				ImGui.SetTooltip("A regex-format string to check each chat message with.");
 

@@ -19,6 +19,11 @@ namespace AetherSense
 
 		public IReadOnlyCollection<Device> All => this.devices.AsReadOnly();
 
+		public void Clear()
+		{
+			this.devices.Clear();
+		}
+
 		public void AddDevice(ButtplugClientDevice clientDevice)
 		{
 			Device device = new Device(clientDevice);
