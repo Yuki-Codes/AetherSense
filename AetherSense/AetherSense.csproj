@@ -14,7 +14,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Buttplug" Version="1.0.8" GeneratePathProperty="true" />
+		<PackageReference Include="Buttplug" Version="1.0.16" GeneratePathProperty="true" />
 		<PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
 	</ItemGroup>
 
@@ -32,15 +32,15 @@
 
 	<ItemGroup>
 		<Reference Include="Dalamud">
-			<HintPath>$(AppData)\XIVLauncher\addon\Hooks\Dalamud.dll</HintPath>
+			<HintPath>$(AppData)\XIVLauncher\addon\Hooks\5.2.3.4\Dalamud.dll</HintPath>
 			<Private>False</Private>
 		</Reference>
 		<Reference Include="ImGui.NET">
-			<HintPath>$(AppData)\XIVLauncher\addon\Hooks\ImGui.NET.dll</HintPath>
+			<HintPath>$(AppData)\XIVLauncher\addon\Hooks\5.2.3.4\ImGui.NET.dll</HintPath>
 			<Private>false</Private>
 		</Reference>
 		<Reference Include="ImGuiScene">
-			<HintPath>$(AppData)\XIVLauncher\addon\Hooks\ImGuiScene.dll</HintPath>
+			<HintPath>$(AppData)\XIVLauncher\addon\Hooks\5.2.3.4\ImGuiScene.dll</HintPath>
 			<Private>False</Private>
 		</Reference>
 	</ItemGroup>

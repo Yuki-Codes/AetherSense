@@ -64,25 +64,30 @@ namespace AetherSense.Triggers
 			if (this.Pattern == null)
 				return;
 
-			this.OnChatMessage(message.TextValue);
+			this.OnChatMessage(sender.TextValue, message.TextValue);
 		}
 
-		public void OnChatMessage(string message)
+		public void OnChatMessage(string sender, string message)
 		{
 			// Don't process any chat messages if the plugin is globally disabled
 			if (!Plugin.Configuration.Enabled)
 				return;
 
-			if (message.StartsWith("You") || message.StartsWith("Vous") || message.StartsWith("Du"))
+			bool isSystem = string.IsNullOrEmpty(sender);
+
+			if (isSystem && (message.StartsWith("You") || message.StartsWith("Vous") || message.StartsWith("Du")))
 			{
 				this.wasPreviousMessageYou = true;
-				return;
+				////return;
 			}
 
 			if (this.OnlyYou && !this.wasPreviousMessageYou)
 				return;
 
 			this.wasPreviousMessageYou = false;
+
+			// Add the sender back into the message before regex.
+			message = sender + ": " + message;
 
 			if (!Regex.IsMatch(message, this.RegexPattern))
 				return;

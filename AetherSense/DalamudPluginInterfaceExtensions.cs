@@ -49,21 +49,5 @@ namespace AetherSense
 
 			return pluginDir;
 		}
-
-		public static string GetConfigPath(this DalamudPluginInterface self)
-		{
-			Type pluginInterfaceType = typeof(DalamudPluginInterface);
-			FieldInfo configsField = pluginInterfaceType.GetField("configs", BindingFlags.Instance | BindingFlags.NonPublic);
-			FieldInfo pluginNameField = pluginInterfaceType.GetField("pluginName", BindingFlags.Instance | BindingFlags.NonPublic);
-
-			PluginConfigurations configs = (PluginConfigurations)configsField.GetValue(Plugin.DalamudPluginInterface);
-			string pluginName = (string)pluginNameField.GetValue(self);
-
-			Type configsType = typeof(PluginConfigurations);
-			FieldInfo configDirectoryField = configsType.GetField("configDirectory", BindingFlags.Instance | BindingFlags.NonPublic);
-			DirectoryInfo configDirectory = (DirectoryInfo)configDirectoryField.GetValue(configs);
-
-			return Path.Combine(configDirectory.FullName, $"{pluginName}_custom.json");
-		}
 	}
 }

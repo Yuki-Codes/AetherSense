@@ -84,7 +84,6 @@ namespace AetherSense
 						Task.Run(async () =>
 						{
 							await Task.Delay(1000);
-							await Buttplug.StopScanningAsync();
 							await Buttplug.StartScanningAsync();
 						});
 					};
