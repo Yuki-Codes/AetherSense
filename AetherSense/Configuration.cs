@@ -62,7 +62,22 @@ namespace AetherSense
 			if (Plugin.DalamudPluginInterface == null)
 				return "config.json";
 
-			return Path.Combine(Plugin.DalamudPluginInterface.GetPluginConfigDirectory() + "config.json");
+			string path = Path.Combine(Plugin.DalamudPluginInterface.GetPluginConfigDirectory() + "/config.json");
+
+			if (File.Exists(path))
+				return path;
+
+			// Migrate old config name
+			string oldPath = Path.Combine(Plugin.DalamudPluginInterface.GetPluginConfigDirectory() + "_custom.json");
+			if (File.Exists(oldPath))
+				File.Move(oldPath, path);
+
+			// Magrate other old config name
+			string oldPath2 = Path.Combine(Plugin.DalamudPluginInterface.GetPluginConfigDirectory() + "config.json");
+			if (File.Exists(oldPath2))
+				File.Move(oldPath2, path);
+
+			return path;
 		}
 	}
 }

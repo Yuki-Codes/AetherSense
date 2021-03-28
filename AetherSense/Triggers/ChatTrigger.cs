@@ -75,19 +75,20 @@ namespace AetherSense.Triggers
 
 			bool isSystem = string.IsNullOrEmpty(sender);
 
-			if (isSystem && (message.StartsWith("You") || message.StartsWith("Vous") || message.StartsWith("Du")))
+			if (this.OnlyYou)
 			{
-				this.wasPreviousMessageYou = true;
-				////return;
+				bool currentMessageWasYou = (isSystem && (message.StartsWith("You") || message.StartsWith("Vous") || message.StartsWith("Du")));
+
+				if (!this.wasPreviousMessageYou)
+				{
+					this.wasPreviousMessageYou = currentMessageWasYou;
+					return;
+				}
 			}
 
-			if (this.OnlyYou && !this.wasPreviousMessageYou)
-				return;
-
-			this.wasPreviousMessageYou = false;
-
 			// Add the sender back into the message before regex.
-			message = sender + ": " + message;
+			if (!isSystem)
+				message = sender + ": " + message;
 
 			if (!Regex.IsMatch(message, this.RegexPattern))
 				return;
