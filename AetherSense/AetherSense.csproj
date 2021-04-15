@@ -8,9 +8,9 @@
 		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
 		<DocumentationFile></DocumentationFile>
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-		<AssemblyVersion>1.0.0.8</AssemblyVersion>
-		<FileVersion>1.0.0.8</FileVersion>
-		<Version>1.0.0.8</Version>
+		<AssemblyVersion>1.0.0.89</AssemblyVersion>
+		<FileVersion>1.0.0.9</FileVersion>
+		<Version>1.0.0.9</Version>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -32,15 +32,15 @@
 
 	<ItemGroup>
 		<Reference Include="Dalamud">
-			<HintPath>$(AppData)\XIVLauncher\addon\Hooks\5.2.3.4\Dalamud.dll</HintPath>
+			<HintPath>$(AppData)\XIVLauncher\addon\Hooks\5.2.5.2\Dalamud.dll</HintPath>
 			<Private>False</Private>
 		</Reference>
 		<Reference Include="ImGui.NET">
-			<HintPath>$(AppData)\XIVLauncher\addon\Hooks\5.2.3.4\ImGui.NET.dll</HintPath>
+			<HintPath>$(AppData)\XIVLauncher\addon\Hooks\5.2.5.2\ImGui.NET.dll</HintPath>
 			<Private>false</Private>
 		</Reference>
 		<Reference Include="ImGuiScene">
-			<HintPath>$(AppData)\XIVLauncher\addon\Hooks\5.2.3.4\ImGuiScene.dll</HintPath>
+			<HintPath>$(AppData)\XIVLauncher\addon\Hooks\5.2.5.2\ImGuiScene.dll</HintPath>
 			<Private>False</Private>
 		</Reference>
 	</ItemGroup>
