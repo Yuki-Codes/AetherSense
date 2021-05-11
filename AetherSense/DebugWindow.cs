@@ -16,14 +16,20 @@ namespace AetherSense
 
 			if (Plugin.Configuration.Enabled)
 			{
-				ImGui.Text(Plugin.Devices.DesiredIntensity.ToString("F2"));
-				ImGui.SameLine();
-				ImGui.Text("/");
-				ImGui.SameLine();
-				ImGui.Text(Plugin.Devices.Maximum.ToString("F2"));
-				ImGui.SameLine();
-				ImGui.ProgressBar((float)Plugin.Devices.CurrentIntensity);
+				foreach (Devices.Group group in Plugin.Devices.Groups)
+				{
+					ImGui.Text("Group: " + group.GroupId);
+					ImGui.SameLine();
+					ImGui.Text(group.DesiredIntensity.ToString("F2"));
+					ImGui.SameLine();
+					ImGui.Text("/");
+					ImGui.SameLine();
+					ImGui.Text(group.Maximum.ToString("F2"));
+					ImGui.SameLine();
+					ImGui.ProgressBar((float)group.CurrentIntensity);
+				}
 			}
+				
 			else
 			{
 				ImGui.Text("AetherSense is disabled");

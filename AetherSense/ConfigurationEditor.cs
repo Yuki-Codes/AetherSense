@@ -88,6 +88,46 @@ namespace AetherSense
 
 					ImGui.EndTabItem();
 				}
+
+				if (ImGui.BeginTabItem("Devices"))
+				{
+					ImGui.Columns(2);
+					ImGui.Text("Name");
+					ImGui.NextColumn();
+					ImGui.Text("Group");
+					ImGui.NextColumn();
+
+					foreach (Device device in Plugin.Devices.All)
+					{
+						string name = device.ClientDevice.Name;
+
+						if (!Plugin.Configuration.DeviceGroups.ContainsKey(name))
+							Plugin.Configuration.DeviceGroups.Add(name, 1);
+
+						ImGui.Text(name);
+
+						ImGui.NextColumn();
+						int group = Plugin.Configuration.DeviceGroups[name];
+
+						string label = group == 0 ? "Disabled" : "Group " + group;
+						if (ImGui.BeginCombo($"##{name}combo", label))
+						{
+							for (int n = 0; n < 10; n++)
+							{
+								label = n == 0 ? "Disabled" : "Group " + n;
+								if (ImGui.Selectable(label, n == group))
+								{
+									group = n;
+								}
+							}
+
+							ImGui.EndCombo();
+						}
+
+						Plugin.Configuration.DeviceGroups[name] = group;
+					}
+
+				}
 				
 				ImGui.EndTabBar();
 			}

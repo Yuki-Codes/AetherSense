@@ -65,9 +65,6 @@ namespace AetherSense.Patterns
 			{
 				await Task.Delay(100);
 				this.DurationLeft -= 100;
-
-				// Cap duration at 10 seconds
-				this.DurationLeft = Math.Min(this.DurationLeft, 10000);
 			}
 
 			this.End();

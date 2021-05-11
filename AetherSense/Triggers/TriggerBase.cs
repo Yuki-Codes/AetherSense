@@ -25,10 +25,13 @@ namespace AetherSense.Triggers
 			set => this.enabled = value;
 		}
 
+		
+
 		[JsonIgnore]
 		public bool IsAttached { get; private set; }
 
 		public PatternBase Pattern { get; set; } = new ConstantPattern();
+		public int DeviceGroup { get; set; } = 0;
 
 		public virtual void Attach()
 		{
@@ -52,10 +55,31 @@ namespace AetherSense.Triggers
 
 			if (open)
 			{
-				ImGui.Checkbox("Enable", ref this.enabled);
-				ImGui.SameLine();
 				ImGui.InputText("Name", ref this.name, 32);
 
+				ImGui.Columns(2);
+
+				ImGui.Checkbox("Enable", ref this.enabled);
+
+				ImGui.NextColumn();
+
+				// Group selector
+				string label = this.DeviceGroup == 0 ? "All" : "Group " + this.DeviceGroup;
+				if (ImGui.BeginCombo($"Devices", label))
+				{
+					for (int n = 0; n < 10; n++)
+					{
+						label = n == 0 ? "All" : "Group " + n;
+						if (ImGui.Selectable(label, n == this.DeviceGroup))
+						{
+							this.DeviceGroup = n;
+						}
+					}
+
+					ImGui.EndCombo();
+				}
+
+				ImGui.Columns(1);
 				ImGui.Separator();
 				ImGui.Columns(2);
 

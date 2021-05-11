@@ -11,6 +11,19 @@ namespace AetherSense
 
 		public double Intensity { get; set; }
 
+		public int Group
+		{
+			get
+			{
+				int group = 1;
+
+				if (!Plugin.Configuration.DeviceGroups.TryGetValue(this.ClientDevice.Name, out group))
+					group = 1;
+
+				return group;
+			}
+		}
+
 		public Device(ButtplugClientDevice clientDevice)
 		{
 			this.ClientDevice = clientDevice;

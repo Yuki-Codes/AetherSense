@@ -20,6 +20,7 @@ namespace AetherSense
 		public bool Enabled { get; set; } = true;
 		public string ServerAddress { get; set; } = "ws://127.0.0.1:12345";
 		public List<TriggerBase> Triggers { get; set; } = new List<TriggerBase>();
+		public Dictionary<string, int> DeviceGroups { get; set; } = new Dictionary<string, int>();
 
 		public static Configuration Load()
 		{
