@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System;
+using System.Text.RegularExpressions;
 using Dalamud.Game.Text;
 using Dalamud.Game.Text.SeStringHandling;
 using Dalamud.Plugin;
@@ -10,13 +11,33 @@ namespace AetherSense.Triggers
 	{
 		private string regexPattern = "";
 		private int duration = 1000;
+		private int cooldown = 250;
 		private bool wasPreviousMessageYou = false;
 		private bool onlyYou = true;
+
+		private DateTime cooldownUntil = DateTime.MinValue;
 
 		public int Duration
 		{
 			get => this.duration;
 			set => this.duration = value;
+		}
+
+		public int Cooldown
+		{
+			get => this.cooldown;
+			set => this.cooldown = value;
+		}
+
+		public override int CooldownLeft
+		{
+			get
+			{
+				if (DateTime.Now > cooldownUntil)
+					return 0;
+
+				return (int)((cooldownUntil - DateTime.Now).TotalMilliseconds);
+			}
 		}
 
 		public bool OnlyYou
@@ -57,6 +78,10 @@ namespace AetherSense.Triggers
 			ImGui.InputInt("Duration", ref this.duration);
 			if (ImGui.IsItemHovered())
 				ImGui.SetTooltip("The duration to run the selected pattern for when this trigger runs.");
+
+			ImGui.InputInt("Cooldown", ref this.cooldown);
+			if (ImGui.IsItemHovered())
+				ImGui.SetTooltip("The cooldown before this trigger can be run again.");
 		}
 
 		private void OnChatMessage(XivChatType type, uint senderId, ref SeString sender, ref SeString message, ref bool isHandled)
@@ -92,6 +117,11 @@ namespace AetherSense.Triggers
 
 			if (!Regex.IsMatch(message, this.RegexPattern))
 				return;
+
+			if (DateTime.Now < cooldownUntil)
+				return;
+
+			cooldownUntil = DateTime.Now.AddMilliseconds(this.Cooldown);
 
 			PluginLog.Information($"Triggered: {this.Name} with chat message: \"{message}\"");
 			this.Pattern.RunFor(this.Duration);

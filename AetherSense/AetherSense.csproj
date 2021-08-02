@@ -8,9 +8,9 @@
 		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
 		<DocumentationFile></DocumentationFile>
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-		<AssemblyVersion>1.0.0.9</AssemblyVersion>
-		<FileVersion>1.0.0.9</FileVersion>
-		<Version>1.0.0.9</Version>
+		<AssemblyVersion>1.0.0.11</AssemblyVersion>
+		<FileVersion>1.0.0.11</FileVersion>
+		<Version>1.0.0.11</Version>
 	</PropertyGroup>
 
 	<ItemGroup>

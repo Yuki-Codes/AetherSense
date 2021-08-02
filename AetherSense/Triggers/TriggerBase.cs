@@ -25,7 +25,7 @@ namespace AetherSense.Triggers
 			set => this.enabled = value;
 		}
 
-		
+		public virtual int CooldownLeft => 0;
 
 		[JsonIgnore]
 		public bool IsAttached { get; private set; }

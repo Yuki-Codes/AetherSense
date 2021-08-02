@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Dalamud.Plugin;
 using ImGuiNET;
 
 namespace AetherSense.Patterns
@@ -16,6 +17,7 @@ namespace AetherSense.Patterns
 		public override void Begin()
 		{
 			base.Begin();
+
 			this.DevicesIntensity = this.Intensity;
 		}
 

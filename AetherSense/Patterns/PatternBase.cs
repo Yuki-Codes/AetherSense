@@ -74,8 +74,9 @@ namespace AetherSense.Patterns
 		{
 			this.Active = true;
 
-			if (this.lastRunTask != null && !this.lastRunTask.IsCompleted && !this.lastRunTask.IsFaulted)
-				throw new Exception("Last pattern task did not complete");
+			// the last task may not have completed, but it should shortly
+			////if (this.lastRunTask != null && !this.lastRunTask.IsCompleted && !this.lastRunTask.IsFaulted)
+			////	throw new Exception("Last pattern task did not complete");
 
 			this.lastRunTask = Task.Run(this.Run);
 		}

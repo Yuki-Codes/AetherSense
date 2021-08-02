@@ -40,7 +40,7 @@ namespace AetherSense
 			foreach (TriggerBase trigger in Plugin.Configuration.Triggers)
 			{
 				string ac = trigger.IsAttached ? "X" : " ";
-				ImGui.Text($"    [{ac}] {trigger.Name}");
+				ImGui.Text($"    [{ac}] {trigger.Name} {trigger.CooldownLeft}");
 
 				if (trigger.IsAttached)
 					attachedCount++;
