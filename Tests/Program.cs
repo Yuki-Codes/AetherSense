@@ -16,7 +16,7 @@ namespace ImGuiNET
 {
 	public class Program
 	{
-		private static AetherSense.Plugin plugin = new AetherSense.Plugin();
+		private static AetherSense.Plugin plugin = new AetherSense.Plugin(null);
 
 		private static Sdl2Window _window;
 		private static GraphicsDevice _gd;

@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>netstandard2.0</TargetFramework>
+		<TargetFramework>net5.0-windows</TargetFramework>
 		<AssemblyName>AetherSense</AssemblyName>
 		<RootNamespace>AetherSense</RootNamespace>
 		<NoWarn>1701;1702;IDE0025; CS1591;IDE0027;</NoWarn>
@@ -15,7 +15,6 @@
 
 	<ItemGroup>
 		<PackageReference Include="Buttplug" Version="1.0.16" GeneratePathProperty="true" />
-		<PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -32,17 +31,17 @@
 
 	<ItemGroup>
 		<Reference Include="Dalamud">
-			<HintPath>$(AppData)\XIVLauncher\addon\Hooks\5.2.5.2\Dalamud.dll</HintPath>
+			<HintPath>$(AppData)\XIVLauncher\addon\Hooks\dev\Dalamud.dll</HintPath>
 			<Private>False</Private>
 		</Reference>
 		<Reference Include="ImGui.NET">
-			<HintPath>$(AppData)\XIVLauncher\addon\Hooks\5.2.5.2\ImGui.NET.dll</HintPath>
+			<HintPath>$(AppData)\XIVLauncher\addon\Hooks\dev\ImGui.NET.dll</HintPath>
 			<Private>false</Private>
 		</Reference>
-		<Reference Include="ImGuiScene">
-			<HintPath>$(AppData)\XIVLauncher\addon\Hooks\5.2.5.2\ImGuiScene.dll</HintPath>
-			<Private>False</Private>
-		</Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>$(AppData)\XIVLauncher\addon\Hooks\dev\Newtonsoft.Json.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
 	</ItemGroup>
 
 	<ItemGroup>

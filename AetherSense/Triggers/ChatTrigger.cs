@@ -2,6 +2,7 @@
 using System.Text.RegularExpressions;
 using Dalamud.Game.Text;
 using Dalamud.Game.Text.SeStringHandling;
+using Dalamud.Logging;
 using Dalamud.Plugin;
 using ImGuiNET;
 
@@ -55,13 +56,13 @@ namespace AetherSense.Triggers
 		public override void Attach()
 		{
 			base.Attach();
-			Plugin.DalamudPluginInterface.Framework.Gui.Chat.OnChatMessage += this.OnChatMessage;
+			Plugin.ChatGui.ChatMessage += this.OnChatMessage;
 		}
 
 		public override void Detach()
 		{
 			base.Detach();
-			Plugin.DalamudPluginInterface.Framework.Gui.Chat.OnChatMessage -= this.OnChatMessage;
+			Plugin.ChatGui.ChatMessage -= this.OnChatMessage;
 		}
 
 		public override void OnEditorGui()
