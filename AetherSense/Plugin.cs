@@ -117,7 +117,7 @@ namespace AetherSense
 						connectorOptions.ServerName = "Aether Sense Server";*/
 
 						PluginLog.Information("Connect to buttplug local server");
-						ButtplugWebsocketConnectorOptions wsOptions = new ButtplugWebsocketConnectorOptions(new Uri("ws://127.0.0.1:12345"));
+						ButtplugWebsocketConnectorOptions wsOptions = new ButtplugWebsocketConnectorOptions(new Uri(Configuration.ServerAddress));
 						await Buttplug.ConnectAsync(wsOptions);
 					}
 					catch (ButtplugConnectorException ex)
