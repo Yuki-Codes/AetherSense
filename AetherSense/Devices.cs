@@ -1,8 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AetherSense.Triggers;
 using Buttplug;
+using Dalamud.Logging;
 using Dalamud.Plugin;
 
 namespace AetherSense

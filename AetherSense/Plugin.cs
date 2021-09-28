@@ -1,4 +1,4 @@
-﻿using Buttplug;
+using Buttplug;
 using Dalamud.Configuration;
 using Dalamud.Plugin;
 using ImGuiNET;
@@ -7,11 +7,18 @@ using System.Threading.Tasks;
 using AetherSense.Triggers;
 using System.IO;
 using AetherSense.Patterns;
+using Dalamud.IoC;
+using Dalamud.Game.Command;
+using Dalamud.Logging;
+using Dalamud.Game.Gui;
 
 namespace AetherSense
 {
-	public class Plugin : IDalamudPlugin
-	{
+    public sealed class Plugin : IDalamudPlugin
+    {
+        [PluginService] public static ChatGui ChatGui { get; private set; } = null!;
+        [PluginService] public static CommandManager CommandManager { get; private set; } = null!;
+
 		public static DalamudPluginInterface DalamudPluginInterface;
 		public static Configuration Configuration;
 		public static Devices Devices = new Devices();
@@ -26,14 +33,18 @@ namespace AetherSense
 		private bool configurationIsVisible;
 		private bool configurationWasVisible = false;
 
-		public void Initialize(DalamudPluginInterface pluginInterface)
-		{
-			DalamudPluginInterface = pluginInterface;
+
+        public Plugin(DalamudPluginInterface pluginInterface)
+        {
+            DalamudPluginInterface = pluginInterface;
+
+            pluginInterface.Inject(this);
+
 			////Configuration = DalamudPluginInterface.GetPluginConfig() as Configuration ?? new Configuration();
-			DalamudPluginInterface.CommandManager.AddHandler("/sense", "Opens the Aether Sense configuration window", this.OnShowConfiguration);
-			DalamudPluginInterface.CommandManager.AddHandler("/senseDebug", "Opens the Aether Sense debug window", this.OnShowDebug);
-			DalamudPluginInterface.UiBuilder.OnBuildUi += OnGui;
-			DalamudPluginInterface.UiBuilder.OnOpenConfigUi += (s, e) => this.configurationIsVisible = true;
+            CommandManager.AddHandler("/sense", "Opens the Aether Sense configuration window", this.OnShowConfiguration);
+            CommandManager.AddHandler("/senseDebug", "Opens the Aether Sense debug window", this.OnShowDebug);
+            DalamudPluginInterface.UiBuilder.Draw += OnGui;
+            DalamudPluginInterface.UiBuilder.OpenConfigUi += () => this.configurationIsVisible = true;
 
 			Devices.Clear();
 
@@ -165,8 +176,8 @@ namespace AetherSense
 
 		public void Dispose()
 		{
-			DalamudPluginInterface.UiBuilder.OnBuildUi -= OnGui;
-			DalamudPluginInterface.CommandManager.ClearHandlers();
+			DalamudPluginInterface.UiBuilder.Draw -= OnGui;
+			CommandManager.ClearHandlers();
 			DalamudPluginInterface.Dispose();
 
 			this.UnloadTriggers();

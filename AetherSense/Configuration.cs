@@ -1,4 +1,5 @@
-﻿using AetherSense.Triggers;
+using AetherSense.Triggers;
+using Dalamud.Logging;
 using Dalamud.Plugin;
 using Newtonsoft.Json;
 using System;
